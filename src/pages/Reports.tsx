@@ -1,8 +1,8 @@
 import React from 'react';
-import { PageHeader } from '../components/common/PageHeader';
-import { Card } from '../components/ui/Card';
-import { StatCard } from '../components/common/StatCard';
-import { formatVND } from '../utils/shippingCalculator';
+import { PageHeader } from '@/components/common/PageHeader';
+import { Card } from '@/components/ui/Card';
+import { StatCard } from '@/components/common/StatCard';
+import { formatVND } from '@/utils/shippingCalculator';
 import { DollarSign, ShoppingBag, Clock } from 'lucide-react';
 import {
   BarChart,

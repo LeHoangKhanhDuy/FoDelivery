@@ -1,19 +1,19 @@
 import React, { useState } from 'react';
-import { PageHeader } from '../components/common/PageHeader';
-import { Input } from '../components/ui/Input';
-import { Select } from '../components/ui/Select';
-import { Button } from '../components/ui/Button';
-import { Card } from '../components/ui/Card';
-import { SearchBox } from '../components/common/SearchBox';
-import { GoogleMapPlaceholder } from '../components/maps/GoogleMapPlaceholder';
-import { useCartStore } from '../stores/useCartStore';
-import { useCustomerStore } from '../stores/useCustomerStore';
-import { useBranchStore } from '../stores/useBranchStore';
-import { useMenuStore } from '../stores/useMenuStore';
-import { useShippingStore } from '../stores/useShippingStore';
-import { useDriverStore } from '../stores/useDriverStore';
-import { useOrderStore } from '../stores/useOrderStore';
-import { calculateShippingFee, formatVND } from '../utils/shippingCalculator';
+import { PageHeader } from '@/components/common/PageHeader';
+import { Input } from '@/components/ui/Input';
+import { Select } from '@/components/ui/Select';
+import { Button } from '@/components/ui/Button';
+import { Card } from '@/components/ui/Card';
+import { SearchBox } from '@/components/common/SearchBox';
+import { GoogleMapPlaceholder } from '@/components/maps/GoogleMapPlaceholder';
+import { useCartStore } from '@/stores/useCartStore';
+import { useCustomerStore } from '@/stores/useCustomerStore';
+import { useBranchStore } from '@/stores/useBranchStore';
+import { useMenuStore } from '@/stores/useMenuStore';
+import { useShippingStore } from '@/stores/useShippingStore';
+import { useDriverStore } from '@/stores/useDriverStore';
+import { useOrderStore } from '@/stores/useOrderStore';
+import { calculateShippingFee, formatVND } from '@/utils/shippingCalculator';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import {
@@ -29,7 +29,7 @@ import {
   Bike,
   CheckCircle,
 } from 'lucide-react';
-import { OrderChannel, PaymentMethod } from '../types';
+import { OrderChannel, PaymentMethod } from '@/types';
 
 export const CreateOrder: React.FC = () => {
   const navigate = useNavigate();

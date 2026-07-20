@@ -1,6 +1,6 @@
 import { create } from 'zustand';
-import { Customer } from '../types';
-import { MOCK_CUSTOMERS } from '../constants/mockData';
+import { Customer } from '@/types';
+import { MOCK_CUSTOMERS } from '@/constants/mockData';
 
 interface CustomerState {
   customers: Customer[];

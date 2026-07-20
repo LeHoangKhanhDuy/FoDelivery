@@ -1,4 +1,4 @@
-import { ShippingRule } from '../types';
+import { ShippingRule } from '@/types';
 
 export function calculateShippingFee(
   distanceKm: number,

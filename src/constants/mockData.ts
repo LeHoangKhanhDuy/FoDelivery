@@ -8,7 +8,7 @@ import {
   ShippingRule, 
   DashboardStats,
   NotificationItem 
-} from '../types';
+} from '@/types';
 
 export const MOCK_CATEGORIES: Category[] = [
   { id: 'cat-1', name: 'Tất cả món', icon: 'Utensils', itemCount: 24 },

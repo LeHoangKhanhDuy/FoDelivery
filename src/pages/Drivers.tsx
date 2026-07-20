@@ -1,13 +1,13 @@
 import React from 'react';
-import { PageHeader } from '../components/common/PageHeader';
-import { StatCard } from '../components/common/StatCard';
-import { Card } from '../components/ui/Card';
-import { Table, Column } from '../components/ui/Table';
-import { Badge } from '../components/ui/Badge';
-import { Button } from '../components/ui/Button';
-import { Avatar } from '../components/ui/Avatar';
-import { useDriverStore } from '../stores/useDriverStore';
-import { Driver } from '../types';
+import { PageHeader } from '@/components/common/PageHeader';
+import { StatCard } from '@/components/common/StatCard';
+import { Card } from '@/components/ui/Card';
+import { Table, Column } from '@/components/ui/Table';
+import { Badge } from '@/components/ui/Badge';
+import { Button } from '@/components/ui/Button';
+import { Avatar } from '@/components/ui/Avatar';
+import { useDriverStore } from '@/stores/useDriverStore';
+import { Driver } from '@/types';
 import { Bike, Star, Clock, Navigation } from 'lucide-react';
 import toast from 'react-hot-toast';
 

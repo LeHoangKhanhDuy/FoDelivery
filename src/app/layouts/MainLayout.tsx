@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Outlet } from 'react-router-dom';
-import { AppSidebar } from '../../components/sidebar/AppSidebar';
-import { AppHeader } from '../../components/header/AppHeader';
+import { AppSidebar } from '@/components/sidebar/AppSidebar';
+import { AppHeader } from '@/components/header/AppHeader';
 
 export const MainLayout: React.FC = () => {
   const [collapsed, setCollapsed] = useState(false);

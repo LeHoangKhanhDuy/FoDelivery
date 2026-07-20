@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { OrderItem, Product, OrderChannel, PaymentMethod } from '../types';
+import { OrderItem, Product, OrderChannel, PaymentMethod } from '@/types';
 
 interface CartState {
   customerName: string;

@@ -1,13 +1,13 @@
 import React from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { PageHeader } from '../components/common/PageHeader';
-import { Card } from '../components/ui/Card';
-import { Badge } from '../components/ui/Badge';
-import { Button } from '../components/ui/Button';
-import { Avatar } from '../components/ui/Avatar';
-import { GoogleMapPlaceholder } from '../components/maps/GoogleMapPlaceholder';
-import { useOrderStore } from '../stores/useOrderStore';
-import { formatVND } from '../utils/shippingCalculator';
+import { PageHeader } from '@/components/common/PageHeader';
+import { Card } from '@/components/ui/Card';
+import { Badge } from '@/components/ui/Badge';
+import { Button } from '@/components/ui/Button';
+import { Avatar } from '@/components/ui/Avatar';
+import { GoogleMapPlaceholder } from '@/components/maps/GoogleMapPlaceholder';
+import { useOrderStore } from '@/stores/useOrderStore';
+import { formatVND } from '@/utils/shippingCalculator';
 import {
   ArrowLeft,
   CheckCircle2,
@@ -15,7 +15,7 @@ import {
   History,
 } from 'lucide-react';
 import toast from 'react-hot-toast';
-import { OrderStatus } from '../types';
+import { OrderStatus } from '@/types';
 
 export const OrderDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();

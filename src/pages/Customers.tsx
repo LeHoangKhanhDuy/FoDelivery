@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
-import { PageHeader } from '../components/common/PageHeader';
-import { SearchBox } from '../components/common/SearchBox';
-import { Table, Column } from '../components/ui/Table';
-import { Badge } from '../components/ui/Badge';
-import { Button } from '../components/ui/Button';
-import { Drawer } from '../components/ui/Drawer';
-import { Avatar } from '../components/ui/Avatar';
-import { useCustomerStore } from '../stores/useCustomerStore';
-import { useOrderStore } from '../stores/useOrderStore';
-import { Customer } from '../types';
-import { formatVND } from '../utils/shippingCalculator';
+import { PageHeader } from '@/components/common/PageHeader';
+import { SearchBox } from '@/components/common/SearchBox';
+import { Table, Column } from '@/components/ui/Table';
+import { Badge } from '@/components/ui/Badge';
+import { Button } from '@/components/ui/Button';
+import { Drawer } from '@/components/ui/Drawer';
+import { Avatar } from '@/components/ui/Avatar';
+import { useCustomerStore } from '@/stores/useCustomerStore';
+import { useOrderStore } from '@/stores/useOrderStore';
+import { Customer } from '@/types';
+import { formatVND } from '@/utils/shippingCalculator';
 import { Eye } from 'lucide-react';
 
 export const Customers: React.FC = () => {

@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { SearchBox } from '../common/SearchBox';
-import { useBranchStore } from '../../stores/useBranchStore';
-import { useTheme } from '../../contexts/ThemeContext';
-import { Avatar } from '../ui/Avatar';
+import { SearchBox } from '@/components/common/SearchBox';
+import { useBranchStore } from '@/stores/useBranchStore';
+import { useTheme } from '@/contexts/ThemeContext';
+import { Avatar } from '@/components/ui/Avatar';
 import {
   Bell,
   Sun,
@@ -14,9 +14,9 @@ import {
   Check,
   Menu as MenuIcon,
 } from 'lucide-react';
-import { MOCK_NOTIFICATIONS } from '../../constants/mockData';
-import { Drawer } from '../ui/Drawer';
-import { Badge } from '../ui/Badge';
+import { MOCK_NOTIFICATIONS } from '@/constants/mockData';
+import { Drawer } from '@/components/ui/Drawer';
+import { Badge } from '@/components/ui/Badge';
 import { useNavigate } from 'react-router-dom';
 
 export interface AppHeaderProps {

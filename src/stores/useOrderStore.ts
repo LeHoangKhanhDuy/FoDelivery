@@ -1,6 +1,6 @@
 import { create } from 'zustand';
-import { Order, OrderStatus } from '../types';
-import { MOCK_ORDERS } from '../constants/mockData';
+import { Order, OrderStatus } from '@/types';
+import { MOCK_ORDERS } from '@/constants/mockData';
 
 interface OrderState {
   orders: Order[];

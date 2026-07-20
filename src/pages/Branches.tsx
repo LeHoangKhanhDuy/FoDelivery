@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { PageHeader } from '../components/common/PageHeader';
-import { Card } from '../components/ui/Card';
-import { Badge } from '../components/ui/Badge';
-import { Button } from '../components/ui/Button';
-import { Input } from '../components/ui/Input';
-import { GoogleMapPlaceholder } from '../components/maps/GoogleMapPlaceholder';
-import { useBranchStore } from '../stores/useBranchStore';
+import { PageHeader } from '@/components/common/PageHeader';
+import { Card } from '@/components/ui/Card';
+import { Badge } from '@/components/ui/Badge';
+import { Button } from '@/components/ui/Button';
+import { Input } from '@/components/ui/Input';
+import { GoogleMapPlaceholder } from '@/components/maps/GoogleMapPlaceholder';
+import { useBranchStore } from '@/stores/useBranchStore';
 import { Store, MapPin, Phone, Navigation } from 'lucide-react';
 import toast from 'react-hot-toast';
 

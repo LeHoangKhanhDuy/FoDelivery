@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { PageHeader } from '../components/common/PageHeader';
-import { Card } from '../components/ui/Card';
-import { Button } from '../components/ui/Button';
-import { Input } from '../components/ui/Input';
-import { Badge } from '../components/ui/Badge';
-import { useShippingStore } from '../stores/useShippingStore';
-import { calculateShippingFee, formatVND } from '../utils/shippingCalculator';
+import { PageHeader } from '@/components/common/PageHeader';
+import { Card } from '@/components/ui/Card';
+import { Button } from '@/components/ui/Button';
+import { Input } from '@/components/ui/Input';
+import { Badge } from '@/components/ui/Badge';
+import { useShippingStore } from '@/stores/useShippingStore';
+import { calculateShippingFee, formatVND } from '@/utils/shippingCalculator';
 import { CheckCircle2, Play } from 'lucide-react';
 import toast from 'react-hot-toast';
 

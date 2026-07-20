@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { PageHeader } from '../components/common/PageHeader';
-import { Card } from '../components/ui/Card';
-import { Button } from '../components/ui/Button';
-import { Input } from '../components/ui/Input';
-import { Tabs } from '../components/ui/Tabs';
-import { Switch } from '../components/ui/Switch';
+import { PageHeader } from '@/components/common/PageHeader';
+import { Card } from '@/components/ui/Card';
+import { Button } from '@/components/ui/Button';
+import { Input } from '@/components/ui/Input';
+import { Tabs } from '@/components/ui/Tabs';
+import { Switch } from '@/components/ui/Switch';
 import { Map, MessageSquare, Printer, Truck, Building, ShieldCheck, Key } from 'lucide-react';
 import toast from 'react-hot-toast';
 

@@ -1,6 +1,6 @@
 import { create } from 'zustand';
-import { Driver } from '../types';
-import { MOCK_DRIVERS } from '../constants/mockData';
+import { Driver } from '@/types';
+import { MOCK_DRIVERS } from '@/constants/mockData';
 
 interface DriverState {
   drivers: Driver[];

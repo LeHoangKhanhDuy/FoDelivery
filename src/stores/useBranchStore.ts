@@ -1,6 +1,6 @@
 import { create } from 'zustand';
-import { Branch } from '../types';
-import { MOCK_BRANCHES } from '../constants/mockData';
+import { Branch } from '@/types';
+import { MOCK_BRANCHES } from '@/constants/mockData';
 
 interface BranchState {
   branches: Branch[];

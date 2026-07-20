@@ -1,15 +1,15 @@
 import React from 'react';
-import { PageHeader } from '../components/common/PageHeader';
-import { StatCard } from '../components/common/StatCard';
-import { Card } from '../components/ui/Card';
-import { Badge } from '../components/ui/Badge';
-import { Button } from '../components/ui/Button';
-import { Avatar } from '../components/ui/Avatar';
-import { MOCK_DASHBOARD_STATS } from '../constants/mockData';
-import { useOrderStore } from '../stores/useOrderStore';
-import { useDriverStore } from '../stores/useDriverStore';
-import { useBranchStore } from '../stores/useBranchStore';
-import { formatVND } from '../utils/shippingCalculator';
+import { PageHeader } from '@/components/common/PageHeader';
+import { StatCard } from '@/components/common/StatCard';
+import { Card } from '@/components/ui/Card';
+import { Badge } from '@/components/ui/Badge';
+import { Button } from '@/components/ui/Button';
+import { Avatar } from '@/components/ui/Avatar';
+import { MOCK_DASHBOARD_STATS } from '@/constants/mockData';
+import { useOrderStore } from '@/stores/useOrderStore';
+import { useDriverStore } from '@/stores/useDriverStore';
+import { useBranchStore } from '@/stores/useBranchStore';
+import { formatVND } from '@/utils/shippingCalculator';
 import {
   DollarSign,
   ShoppingBag,

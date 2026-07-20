@@ -1,6 +1,6 @@
 import { create } from 'zustand';
-import { ShippingRule } from '../types';
-import { MOCK_SHIPPING_RULES } from '../constants/mockData';
+import { ShippingRule } from '@/types';
+import { MOCK_SHIPPING_RULES } from '@/constants/mockData';
 
 interface ShippingState {
   rules: ShippingRule[];

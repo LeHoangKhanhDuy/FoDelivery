@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Button } from '../components/ui/Button';
+import { Button } from '@/components/ui/Button';
 import { AlertTriangle, Home } from 'lucide-react';
 
 export const NotFound: React.FC = () => {

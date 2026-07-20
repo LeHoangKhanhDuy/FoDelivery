@@ -17,7 +17,7 @@ import {
   ChevronRight,
   X,
 } from 'lucide-react';
-import { useOrderStore } from '../../stores/useOrderStore';
+import { useOrderStore } from '@/stores/useOrderStore';
 
 export interface AppSidebarProps {
   collapsed?: boolean;
