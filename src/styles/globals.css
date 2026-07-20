@@ -90,3 +90,21 @@ html, body {
   transform: translateY(-2px);
   box-shadow: 0 10px 25px -5px rgba(249, 115, 22, 0.15), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
 }
+
+/* Remove Recharts & SVG focus outline/border on click */
+.recharts-responsive-container,
+.recharts-responsive-container:focus,
+.recharts-responsive-container *:focus,
+.recharts-wrapper,
+.recharts-wrapper:focus,
+.recharts-wrapper *:focus,
+.recharts-surface,
+.recharts-surface:focus,
+.recharts-layer,
+.recharts-layer:focus,
+svg:focus,
+svg *:focus,
+div[tabindex]:focus {
+  outline: none !important;
+  box-shadow: none !important;
+}

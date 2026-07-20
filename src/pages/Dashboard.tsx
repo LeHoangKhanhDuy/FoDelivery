@@ -1,6 +1,7 @@
 import React from 'react';
 import { PageHeader } from '@/components/common/PageHeader';
 import { StatCard } from '@/components/common/StatCard';
+import { ChannelIcon } from '@/components/common/ChannelIcon';
 import { Card } from '@/components/ui/Card';
 import { Badge } from '@/components/ui/Badge';
 import { Button } from '@/components/ui/Button';
@@ -91,15 +92,6 @@ export const Dashboard: React.FC = () => {
       <PageHeader
         title="Tổng quan Điều phối & Doanh thu"
         subtitle="Theo dõi doanh thu thời gian thực, hiệu suất giao hàng và đội ngũ tài xế."
-        action={
-          <Button
-            variant="primary"
-            leftIcon={<Plus className="w-4 h-4" />}
-            onClick={() => navigate('/orders/new')}
-          >
-            Tạo đơn hàng mới
-          </Button>
-        }
       />
 
       {/* 4 Stat Cards */}
@@ -147,7 +139,12 @@ export const Dashboard: React.FC = () => {
               </h3>
               <p className="text-xs text-slate-500">Dữ liệu đơn hàng Đa kênh theo mốc giờ</p>
             </div>
-            <Badge variant="primary" size="sm">Trực tiếp</Badge>
+            <div title="Đang phát trực tiếp" className="p-2 rounded-full bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200 dark:border-emerald-800/60 shadow-xs flex items-center justify-center">
+              <span className="relative flex h-2.5 w-2.5">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
+              </span>
+            </div>
           </div>
 
           <div className="h-72 sm:h-80 w-full pt-2">
@@ -213,7 +210,6 @@ export const Dashboard: React.FC = () => {
               variant="ghost"
               size="sm"
               onClick={() => navigate('/orders')}
-              rightIcon={<ArrowRight className="w-3.5 h-3.5" />}
             >
               Xem tất cả
             </Button>
@@ -227,9 +223,7 @@ export const Dashboard: React.FC = () => {
                 className="py-3 flex flex-col sm:flex-row sm:items-center justify-between hover:bg-slate-50/80 dark:hover:bg-slate-800/40 rounded-xl px-2 transition-colors cursor-pointer gap-2"
               >
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-xl bg-orange-50 text-[#F97316] font-bold text-xs flex items-center justify-center border border-orange-200 shrink-0">
-                    {ord.channel}
-                  </div>
+                  <ChannelIcon channel={ord.channel} size="md" />
                   <div className="min-w-0">
                     <div className="flex items-center gap-2">
                       <span className="font-bold text-xs text-slate-900 dark:text-slate-100">{ord.code}</span>
