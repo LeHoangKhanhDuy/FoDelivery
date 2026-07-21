@@ -1,5 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { PageHeader } from '@/components/common/PageHeader';
+import { ChannelIcon } from '@/components/common/ChannelIcon';
 import { SearchBox } from '@/components/common/SearchBox';
 import { Tabs } from '@/components/ui/Tabs';
 import { Select } from '@/components/ui/Select';
@@ -111,11 +112,9 @@ export const Orders: React.FC = () => {
       header: 'Mã đơn hàng',
       accessor: 'code',
       cell: (item) => (
-        <div className="font-extrabold text-slate-900 dark:text-slate-100 flex items-center gap-2">
-          <span>{item.code}</span>
-          <span className="text-[10px] font-bold px-1.5 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-500">
-            {item.channel}
-          </span>
+        <div className="flex items-center gap-2">
+          <span className="font-extrabold text-slate-900 dark:text-slate-100">{item.code}</span>
+          <ChannelIcon channel={item.channel} size="sm" />
         </div>
       ),
     },
