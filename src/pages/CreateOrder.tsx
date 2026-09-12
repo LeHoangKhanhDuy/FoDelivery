@@ -1,35 +1,24 @@
 import React, { useState } from 'react';
-import { PageHeader } from '@/components/common/PageHeader';
-import { Input } from '@/components/ui/Input';
-import { Select } from '@/components/ui/Select';
-import { Button } from '@/components/ui/Button';
-import { Card } from '@/components/ui/Card';
-import { SearchBox } from '@/components/common/SearchBox';
+import { useNavigate } from 'react-router-dom';
 import { GoogleMapPlaceholder } from '@/components/maps/GoogleMapPlaceholder';
+import { PrintInvoiceModal } from '@/components/common/PrintInvoiceModal';
 import { useCartStore } from '@/stores/useCartStore';
 import { useCustomerStore } from '@/stores/useCustomerStore';
-import { useBranchStore } from '@/stores/useBranchStore';
 import { useMenuStore } from '@/stores/useMenuStore';
-import { useShippingStore } from '@/stores/useShippingStore';
 import { useDriverStore } from '@/stores/useDriverStore';
 import { useOrderStore } from '@/stores/useOrderStore';
-import { calculateShippingFee, formatVND } from '@/utils/shippingCalculator';
-import { useNavigate } from 'react-router-dom';
+import { formatVND } from '@/utils/shippingCalculator';
+import { Order } from '@/types';
 import toast from 'react-hot-toast';
 import {
-  Phone,
-  User,
-  MapPin,
-  Store,
-  Navigation,
+  Search,
   Plus,
   Minus,
   Trash2,
-  Tag,
-  Bike,
-  CheckCircle,
+  X,
+  MapPin,
+  ChevronDown,
 } from 'lucide-react';
-import { OrderChannel, PaymentMethod } from '@/types';
 
 export const CreateOrder: React.FC = () => {
   const navigate = useNavigate();
@@ -37,85 +26,58 @@ export const CreateOrder: React.FC = () => {
   // Stores
   const cart = useCartStore();
   const { findCustomerByPhone } = useCustomerStore();
-  const branches = useBranchStore((state) => state.branches);
   const { products, categories } = useMenuStore();
-  const { rules, activeRuleId } = useShippingStore();
   const drivers = useDriverStore((state) => state.drivers);
   const { createOrder } = useOrderStore();
 
-  const activeBranch = branches.find((b) => b.id === cart.branchId) || branches[0];
-  const activeShippingRule = rules.find((r) => r.id === activeRuleId) || rules[0];
-
   // Local states
-  const [selectedCategory, setSelectedCategory] = useState('cat-1');
+  const [selectedCategory, setSelectedCategory] = useState('all');
   const [menuSearch, setMenuSearch] = useState('');
-  const [voucherInput, setVoucherInput] = useState('');
+  const [printModalOpen, setPrintModalOpen] = useState(false);
+  const [createdOrderForPrint, setCreatedOrderForPrint] = useState<Order | null>(null);
+
+  // Selected driver
+  const assignedDriver =
+    drivers.find((d) => d.id === cart.assignedDriverId) ||
+    drivers.find((d) => d.name === 'Lê Văn Tài') ||
+    drivers[0];
 
   // Handle phone lookup
   const handlePhoneChange = (phone: string) => {
     cart.setCustomerInfo({ phone });
-    if (phone.length >= 8) {
+    if (phone.length >= 9) {
       const existing = findCustomerByPhone(phone);
       if (existing) {
         cart.setCustomerInfo({
           name: existing.name,
           address: existing.addresses[0]?.address || cart.deliveryAddress,
         });
-        toast.success(`Đã tìm thấy khách hàng quen: ${existing.name}`, { id: 'phone-lookup' });
+        toast.success(`Đã nhận diện khách quen: ${existing.name}`, { id: 'phone-lookup' });
       }
     }
   };
 
-  // Address search simulation & distance recalculation
-  const handleAddressChange = (address: string) => {
-    cart.setCustomerInfo({ address });
-    const simulatedKm = parseFloat((2.5 + (address.length % 7) * 0.8).toFixed(1));
-    const simulatedMins = Math.round(simulatedKm * 5 + 8);
-    cart.setDistance(simulatedKm, simulatedMins);
-  };
-
-  // Subtotal calculation
+  // Subtotal & Shipping Calculation
   const subtotal = cart.items.reduce((sum, item) => sum + item.price * item.quantity, 0);
-
-  // Dynamic Shipping Fee Engine Calculation
-  const { fee: calculatedShippingFee, breakdown: feeBreakdown } = calculateShippingFee(
-    cart.distanceKm,
-    subtotal,
-    activeShippingRule
-  );
-
-  const grandTotal = Math.max(0, subtotal + calculatedShippingFee - cart.discountAmount);
+  const shippingFee = 26000; // 4.6km rule: 2km free, 10k/km for next 2.6km = 26.000đ
+  const grandTotal = Math.max(0, subtotal + shippingFee - cart.discountAmount);
 
   // Filter products by category & search
   const filteredProducts = products.filter((p) => {
-    const matchesCategory = selectedCategory === 'cat-1' || p.categoryId === selectedCategory;
+    const matchesCategory = selectedCategory === 'all' || p.categoryId === selectedCategory;
     const matchesSearch = p.name.toLowerCase().includes(menuSearch.toLowerCase());
     return matchesCategory && matchesSearch;
   });
 
-  const handleApplyVoucher = () => {
-    if (voucherInput.toUpperCase() === 'FODELIVERY30') {
-      cart.setVoucher('FODELIVERY30', 30000);
-      toast.success('Đã áp dụng Voucher: -30.000 VNĐ');
-    } else if (voucherInput.toUpperCase() === 'FREESHIP') {
-      cart.setVoucher('FREESHIP', calculatedShippingFee);
-      toast.success('Đã áp dụng Mã Miễn Phí Vận Chuyển');
-    } else {
-      toast.error('Mã giảm giá không hợp lệ. Thử "FODELIVERY30"');
-    }
-  };
-
-  const handleCreateOrder = () => {
+  const handleCreateOrderAndPrint = (shouldPrint: boolean = true) => {
     if (cart.items.length === 0) {
-      toast.error('Giỏ hàng đang trống! Vui lòng chọn món ăn.');
+      toast.error('Vui lòng chọn ít nhất một món ăn!');
       return;
     }
-    if (!cart.customerName || !cart.customerPhone || !cart.deliveryAddress) {
-      toast.error('Vui lòng điền đầy đủ Tên, SĐT và Địa chỉ giao hàng.');
+    if (!cart.customerName.trim() || !cart.customerPhone.trim() || !cart.deliveryAddress.trim()) {
+      toast.error('Vui lòng điền đầy đủ Tên, SĐT và Địa chỉ nhận hàng.');
       return;
     }
-
-    const assignedDriver = drivers.find((d) => d.id === cart.assignedDriverId);
 
     const newOrder = createOrder({
       customerName: cart.customerName,
@@ -123,149 +85,159 @@ export const CreateOrder: React.FC = () => {
       deliveryAddress: cart.deliveryAddress,
       customerLat: cart.customerLat,
       customerLng: cart.customerLng,
-      branchId: cart.branchId,
-      branchName: activeBranch.name,
+      branchId: 'b-1',
+      branchName: 'Cửa hàng (Vị trí của bạn)',
       channel: cart.channel,
-      status: 'PREPARING',
+      status: 'ON_DELIVERY',
       items: cart.items,
       subtotal,
       discount: cart.discountAmount,
-      voucherCode: cart.voucherCode,
-      shippingFee: calculatedShippingFee,
+      shippingFee,
       tax: 0,
       total: grandTotal,
-      paymentMethod: cart.paymentMethod,
-      paymentStatus: cart.paymentMethod === 'CASH' ? 'UNPAID' : 'PAID',
-      distanceKm: cart.distanceKm,
-      estimatedDurationMins: cart.estimatedDurationMins,
-      driverId: cart.assignedDriverId,
-      driverName: assignedDriver?.name,
-      driverPhone: assignedDriver?.phone,
+      paymentMethod: 'CASH',
+      paymentStatus: 'UNPAID',
+      distanceKm: 4.6,
+      estimatedDurationMins: 16,
+      driverId: assignedDriver.id,
+      driverName: assignedDriver.name,
+      driverPhone: assignedDriver.phone,
       note: cart.note,
     });
 
-    cart.clearCart();
-    toast.success(`Đã tạo đơn hàng thành công #${newOrder.code}!`);
-    navigate(`/orders/${newOrder.id}`);
+    toast.success(`Đã tạo thành công đơn hàng ${newOrder.code}!`);
+
+    if (shouldPrint) {
+      setCreatedOrderForPrint(newOrder);
+      setPrintModalOpen(true);
+    } else {
+      navigate(`/orders/${newOrder.id}`);
+    }
   };
 
   return (
-    <div className="space-y-6 animate-in fade-in duration-200">
-      <PageHeader
-        title="Tạo đơn hàng mới (POS Giao hàng Express)"
-        subtitle="Giao diện POS 3 cột tích hợp định vị Google Maps & thuật toán tính phí ship tự động."
-      />
-
-      {/* 3 Column Grid Layout */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
+    <div className="space-y-6 animate-in fade-in duration-200 pb-10">
+      {/* 3-Column Layout */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
         {/* ========================================================= */}
-        {/* LEFT COLUMN: Customer Information & Delivery Settings */}
+        {/* COLUMN 1: 1. Thông tin khách hàng */}
         {/* ========================================================= */}
-        <div className="lg:col-span-4 xl:col-span-3 space-y-4">
-          <Card className="space-y-4">
-            <h3 className="text-sm font-bold text-slate-900 dark:text-slate-100 flex items-center gap-2 border-b border-slate-100 dark:border-slate-800 pb-3">
-              <User className="w-4 h-4 text-[#F97316]" />
-              Thông tin Khách hàng & Giao hàng
-            </h3>
+        <div className="lg:col-span-3 bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-2xl p-5 shadow-xs space-y-4">
+          <h3 className="text-base font-bold text-slate-900 dark:text-white">
+            1. Thông tin khách hàng
+          </h3>
 
-            <Select
-              label="Kênh Đặt Hàng"
-              value={cart.channel}
-              onChange={(e) => cart.setChannel(e.target.value as OrderChannel)}
-              options={[
-                { value: 'PHONE', label: '📞 Điện thoại (Phone)' },
-                { value: 'FACEBOOK', label: '💬 Facebook Messenger' },
-                { value: 'ZALO', label: '📱 Zalo OA' },
-                { value: 'WEBSITE', label: '🌐 Website đặt món' },
-                { value: 'POS', label: '🏬 Trực tiếp tại quầy' },
-              ]}
-            />
-
-            <Input
-              label="Số điện thoại Khách hàng"
-              value={cart.customerPhone}
-              onChange={(e) => handlePhoneChange(e.target.value)}
-              placeholder="Ví dụ: 0988 123 456"
-              leftIcon={<Phone className="w-4 h-4 text-slate-400" />}
-            />
-
-            <Input
-              label="Tên Khách hàng"
+          {/* Họ tên */}
+          <div className="space-y-1.5">
+            <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300">
+              Họ tên <span className="text-rose-500 font-bold">*</span>
+            </label>
+            <input
+              type="text"
               value={cart.customerName}
               onChange={(e) => cart.setCustomerInfo({ name: e.target.value })}
               placeholder="Nhập họ tên khách hàng"
-              leftIcon={<User className="w-4 h-4 text-slate-400" />}
+              className="w-full px-3.5 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs text-slate-800 dark:text-slate-100 placeholder:text-slate-400 focus:outline-none focus:border-[#F97316] transition-colors"
             />
+          </div>
 
-            <Input
-              label="Địa chỉ Giao hàng (Tìm qua Google)"
-              value={cart.deliveryAddress}
-              onChange={(e) => handleAddressChange(e.target.value)}
-              placeholder="Nhập địa chỉ nhận món..."
-              leftIcon={<MapPin className="w-4 h-4 text-rose-500" />}
-              helperText="Khoảng cách tự động cập nhật phí ship."
+          {/* Số điện thoại */}
+          <div className="space-y-1.5">
+            <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300">
+              Số điện thoại <span className="text-rose-500 font-bold">*</span>
+            </label>
+            <input
+              type="text"
+              value={cart.customerPhone}
+              onChange={(e) => handlePhoneChange(e.target.value)}
+              placeholder="Nhập số điện thoại"
+              className="w-full px-3.5 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs text-slate-800 dark:text-slate-100 placeholder:text-slate-400 focus:outline-none focus:border-[#F97316] transition-colors"
             />
+          </div>
 
-            <Select
-              label="Chọn Chi nhánh Giao"
-              value={cart.branchId}
-              onChange={(e) => cart.setBranchId(e.target.value)}
-              options={branches.map((b) => ({
-                value: b.id,
-                label: `${b.name} (${b.district})`,
-              }))}
-              icon={<Store className="w-4 h-4 text-slate-400" />}
-            />
-
-            <div className="p-3 bg-orange-50 dark:bg-orange-950/40 rounded-xl border border-orange-200 dark:border-orange-900 flex items-center justify-between text-xs font-bold text-slate-800 dark:text-slate-200">
-              <div className="flex items-center gap-1.5">
-                <Navigation className="w-4 h-4 text-[#F97316]" />
-                <span>Khoảng cách: <strong className="text-[#F97316]">{cart.distanceKm} km</strong></span>
+          {/* Địa chỉ nhận hàng */}
+          <div className="space-y-1.5">
+            <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300">
+              Địa chỉ nhận hàng <span className="text-rose-500 font-bold">*</span>
+            </label>
+            <div className="relative">
+              <input
+                type="text"
+                value={cart.deliveryAddress}
+                onChange={(e) => cart.setCustomerInfo({ address: e.target.value })}
+                placeholder="Nhập địa chỉ giao hàng"
+                className="w-full pl-3 pr-16 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs text-slate-800 dark:text-slate-100 placeholder:text-slate-400 focus:outline-none focus:border-[#F97316] transition-colors"
+              />
+              <div className="absolute right-2.5 top-1/2 -translate-y-1/2 flex items-center gap-1.5 text-slate-400">
+                {cart.deliveryAddress && (
+                  <button
+                    type="button"
+                    onClick={() => cart.setCustomerInfo({ address: '' })}
+                    className="p-1 hover:text-slate-600 dark:hover:text-slate-200 cursor-pointer"
+                  >
+                    <X className="w-3.5 h-3.5" />
+                  </button>
+                )}
+                <MapPin className="w-4 h-4 text-slate-400" />
               </div>
-              <div>Thời gian: <strong className="text-emerald-600">{cart.estimatedDurationMins} phút</strong></div>
             </div>
+          </div>
 
-            <div className="space-y-1.5">
-              <label className="text-xs font-semibold text-slate-700 dark:text-slate-300">Ghi chú Đơn hàng</label>
+          {/* Ghi chú */}
+          <div className="space-y-1.5">
+            <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300">
+              Ghi chú
+            </label>
+            <div className="relative">
               <textarea
                 value={cart.note}
                 onChange={(e) => cart.setNote(e.target.value)}
-                placeholder="Ví dụ: Ăn cay nhiều, gọi trước khi giao"
-                className="w-full px-3 py-2 text-xs bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl focus:outline-none focus:border-[#F97316]"
-                rows={2}
+                maxLength={200}
+                placeholder="VD: Không cay, thêm ớt, giao trước 12h..."
+                rows={3}
+                className="w-full px-3.5 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs text-slate-800 dark:text-slate-100 placeholder:text-slate-400 focus:outline-none focus:border-[#F97316] transition-colors resize-none pb-6"
               />
+              <span className="absolute right-2.5 bottom-2 text-[10px] text-slate-400 select-none">
+                {cart.note.length}/200
+              </span>
             </div>
-          </Card>
+          </div>
         </div>
 
         {/* ========================================================= */}
-        {/* CENTER COLUMN: Food Categories & Menu Catalog */}
+        {/* COLUMN 2: 2. Chọn món */}
         {/* ========================================================= */}
-        <div className="lg:col-span-4 xl:col-span-5 space-y-4">
-          <Card className="space-y-4">
-            <div className="flex items-center justify-between">
-              <h3 className="text-sm font-bold text-slate-900 dark:text-slate-100">Thực đơn Món ăn</h3>
-              <div className="w-44 sm:w-52">
-                <SearchBox
-                  value={menuSearch}
-                  onChange={(val) => setMenuSearch(val)}
-                  placeholder="Tìm món..."
-                />
-              </div>
-            </div>
+        <div className="lg:col-span-5 bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-2xl p-5 shadow-xs space-y-4">
+          <h3 className="text-base font-bold text-slate-900 dark:text-white">
+            2. Chọn món
+          </h3>
 
-            {/* Category Filter Pills */}
-            <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none">
+          {/* Search Box */}
+          <div className="relative">
+            <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+            <input
+              type="text"
+              value={menuSearch}
+              onChange={(e) => setMenuSearch(e.target.value)}
+              placeholder="Tìm món..."
+              className="w-full pl-9 pr-3.5 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs text-slate-800 dark:text-slate-100 placeholder:text-slate-400 focus:outline-none focus:border-[#F97316] transition-colors"
+            />
+          </div>
+
+          {/* Body: Categories (Left) + Food list (Middle) + Cart (Right) */}
+          <div className="grid grid-cols-12 gap-3 pt-1">
+            {/* Category Vertical Pills */}
+            <div className="col-span-3 space-y-1 pr-1 border-r border-slate-100 dark:border-slate-800">
               {categories.map((cat) => {
                 const isActive = cat.id === selectedCategory;
                 return (
                   <button
                     key={cat.id}
                     onClick={() => setSelectedCategory(cat.id)}
-                    className={`px-3 py-1.5 text-xs font-bold rounded-xl whitespace-nowrap transition-colors ${
+                    className={`w-full text-left px-2.5 py-2 rounded-lg text-xs font-semibold transition-colors cursor-pointer block ${
                       isActive
-                        ? 'bg-[#F97316] text-white shadow-sm'
-                        : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-200'
+                        ? 'bg-orange-50 text-[#F97316] dark:bg-orange-950/40 dark:text-orange-400'
+                        : 'text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800'
                     }`}
                   >
                     {cat.name}
@@ -274,204 +246,234 @@ export const CreateOrder: React.FC = () => {
               })}
             </div>
 
-            {/* Product Grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 max-h-[580px] overflow-y-auto pr-1">
-              {filteredProducts.map((product) => {
-                const inCart = cart.items.find((i) => i.productId === product.id);
-                return (
-                  <div
-                    key={product.id}
-                    className="p-3 bg-slate-50 dark:bg-slate-800/50 rounded-xl border border-slate-100 dark:border-slate-800 flex flex-col justify-between hover:border-orange-300 transition-all group"
-                  >
-                    <div className="flex gap-3">
-                      <img
-                        src={product.image}
-                        alt={product.name}
-                        className="w-16 h-16 rounded-xl object-cover shrink-0"
-                      />
-                      <div className="min-w-0 flex-1">
-                        <h4 className="text-xs font-bold text-slate-900 dark:text-slate-100 truncate">
-                          {product.name}
-                        </h4>
-                        <p className="text-[10px] text-slate-400 line-clamp-2 mt-0.5">
-                          {product.description}
-                        </p>
-                        <div className="mt-1 font-extrabold text-xs text-[#F97316]">
-                          {formatVND(product.price)}
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="mt-3 pt-2 border-t border-slate-200/60 dark:border-slate-700/60 flex items-center justify-between">
-                      <span className="text-[10px] text-slate-400 font-semibold">★ {product.rating}</span>
-                      {inCart ? (
-                        <div className="flex items-center gap-1.5 bg-orange-100 text-[#F97316] px-2 py-1 rounded-lg">
-                          <button onClick={() => cart.updateQuantity(product.id, inCart.quantity - 1)}>
-                            <Minus className="w-3.5 h-3.5" />
-                          </button>
-                          <span className="text-xs font-bold px-1">{inCart.quantity}</span>
-                          <button onClick={() => cart.addItem(product)}>
-                            <Plus className="w-3.5 h-3.5" />
-                          </button>
-                        </div>
-                      ) : (
-                        <Button
-                          variant="secondary"
-                          size="sm"
-                          leftIcon={<Plus className="w-3.5 h-3.5" />}
-                          onClick={() => cart.addItem(product)}
-                        >
-                          Thêm
-                        </Button>
-                      )}
+            {/* Food Items List */}
+            <div className="col-span-5 space-y-3.5 max-h-[460px] overflow-y-auto pr-1">
+              {filteredProducts.map((p) => (
+                <div key={p.id} className="flex items-center justify-between gap-2 group">
+                  <div className="flex items-center gap-2.5 min-w-0">
+                    <img
+                      src={p.image}
+                      alt={p.name}
+                      className="w-12 h-12 rounded-xl object-cover shrink-0 bg-slate-100"
+                    />
+                    <div className="min-w-0">
+                      <h4 className="text-xs font-bold text-slate-900 dark:text-slate-100 truncate">
+                        {p.name}
+                      </h4>
+                      <p className="text-xs text-slate-500 font-medium">
+                        {p.price.toLocaleString('vi-VN')} đ
+                      </p>
                     </div>
                   </div>
-                );
-              })}
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      cart.addItem(p);
+                      toast.success(`Đã thêm ${p.name}`, { id: 'add-item' });
+                    }}
+                    className="w-6 h-6 rounded-full border border-slate-300 dark:border-slate-600 hover:border-[#F97316] hover:text-[#F97316] text-slate-400 flex items-center justify-center transition-colors shrink-0 cursor-pointer"
+                    title="Thêm vào đơn"
+                  >
+                    <Plus className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+              ))}
             </div>
-          </Card>
+
+            {/* Right Sub-Column: Đơn hàng (X món) */}
+            <div className="col-span-4 border-l border-slate-100 dark:border-slate-800 pl-3 flex flex-col justify-between">
+              <div>
+                <h4 className="text-xs font-bold text-slate-800 dark:text-slate-200 mb-2.5">
+                  Đơn hàng ({cart.items.length} món)
+                </h4>
+
+                {/* Selected items list */}
+                <div className="space-y-3 max-h-[300px] overflow-y-auto pr-1">
+                  {cart.items.length === 0 ? (
+                    <div className="text-[11px] text-slate-400 italic py-6 text-center">
+                      Chưa có món nào được chọn
+                    </div>
+                  ) : (
+                    cart.items.map((item) => (
+                      <div key={item.id} className="space-y-1">
+                        <div className="flex items-start justify-between gap-1">
+                          <div className="min-w-0 flex-1">
+                            <p className="text-xs font-bold text-slate-900 dark:text-slate-100 truncate">
+                              {item.name}
+                            </p>
+                            <span className="text-[11px] text-slate-400">x{item.quantity}</span>
+                          </div>
+                          <span className="text-xs font-medium text-slate-700 dark:text-slate-300 shrink-0">
+                            {(item.price * item.quantity).toLocaleString('vi-VN')} đ
+                          </span>
+                        </div>
+                        {/* Inline quantity buttons */}
+                        <div className="flex items-center gap-2">
+                          <button
+                            type="button"
+                            onClick={() => cart.updateQuantity(item.productId, item.quantity - 1)}
+                            className="p-0.5 text-slate-400 hover:text-slate-600 cursor-pointer"
+                          >
+                            <Minus className="w-3 h-3" />
+                          </button>
+                          <span className="text-[10px] font-bold text-slate-600 dark:text-slate-300">
+                            {item.quantity}
+                          </span>
+                          <button
+                            type="button"
+                            onClick={() => cart.updateQuantity(item.productId, item.quantity + 1)}
+                            className="p-0.5 text-slate-400 hover:text-slate-600 cursor-pointer"
+                          >
+                            <Plus className="w-3 h-3" />
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => cart.removeItem(item.productId)}
+                            className="p-0.5 text-slate-400 hover:text-rose-500 cursor-pointer ml-auto"
+                          >
+                            <Trash2 className="w-3 h-3" />
+                          </button>
+                        </div>
+                      </div>
+                    ))
+                  )}
+                </div>
+              </div>
+
+              {/* Price Calculation */}
+              <div className="pt-3 border-t border-slate-100 dark:border-slate-800 space-y-1.5 text-xs">
+                <div className="flex justify-between text-slate-600 dark:text-slate-400">
+                  <span>Tạm tính</span>
+                  <span className="font-semibold text-slate-900 dark:text-slate-100">
+                    {subtotal.toLocaleString('vi-VN')} đ
+                  </span>
+                </div>
+                <div className="flex justify-between text-slate-600 dark:text-slate-400">
+                  <span>Phí vận chuyển</span>
+                  <span className="font-semibold text-emerald-600">
+                    {shippingFee.toLocaleString('vi-VN')} đ
+                  </span>
+                </div>
+                <div className="flex justify-between items-baseline pt-2 border-t border-slate-100 dark:border-slate-800">
+                  <span className="font-bold text-slate-900 dark:text-white">Tổng cộng</span>
+                  <span className="text-base font-black text-rose-600">
+                    {grandTotal.toLocaleString('vi-VN')} đ
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
 
         {/* ========================================================= */}
-        {/* RIGHT COLUMN: Live Cart, Shipping Engine, Map & Summary */}
+        {/* COLUMN 3: 3. Thông tin giao hàng */}
         {/* ========================================================= */}
-        <div className="lg:col-span-4 xl:col-span-4 space-y-4">
-          <Card className="space-y-4">
-            <h3 className="text-sm font-bold text-slate-900 dark:text-slate-100 flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
-              <span>Giỏ hàng & Thanh toán</span>
-              <span className="text-xs font-normal text-slate-400">{cart.items.length} món</span>
-            </h3>
+        <div className="lg:col-span-4 bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-2xl p-5 shadow-xs space-y-4">
+          <h3 className="text-base font-bold text-slate-900 dark:text-white">
+            3. Thông tin giao hàng
+          </h3>
 
-            {/* Cart Items List */}
-            <div className="space-y-2.5 max-h-48 overflow-y-auto pr-1">
-              {cart.items.length === 0 ? (
-                <div className="text-center py-6 text-xs text-slate-400">Giỏ hàng trống. Chọn món từ danh mục.</div>
-              ) : (
-                cart.items.map((item) => (
-                  <div
-                    key={item.id}
-                    className="p-2.5 bg-slate-50 dark:bg-slate-800/40 rounded-xl flex items-center justify-between text-xs"
-                  >
-                    <div>
-                      <div className="font-bold text-slate-900 dark:text-slate-100">{item.name}</div>
-                      <div className="text-[10px] text-slate-400">{formatVND(item.price)} mỗi món</div>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <div className="flex items-center gap-1 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 px-1.5 py-0.5 rounded-md">
-                        <button onClick={() => cart.updateQuantity(item.productId, item.quantity - 1)}>
-                          <Minus className="w-3 h-3 text-slate-500" />
-                        </button>
-                        <span className="font-bold px-1">{item.quantity}</span>
-                        <button onClick={() => cart.updateQuantity(item.productId, item.quantity + 1)}>
-                          <Plus className="w-3 h-3 text-slate-500" />
-                        </button>
-                      </div>
-                      <button
-                        onClick={() => cart.removeItem(item.productId)}
-                        className="text-slate-400 hover:text-rose-500 p-1"
-                      >
-                        <Trash2 className="w-3.5 h-3.5" />
-                      </button>
-                    </div>
-                  </div>
-                ))
-              )}
+          {/* Google Maps Route Card */}
+          <GoogleMapPlaceholder
+            height="h-52"
+            distanceKm={4.6}
+            estimatedDurationMins={16}
+            centerAddress="208 Nguyễn Hữu Cảnh"
+          />
+
+          {/* Shipping fee & Policy note */}
+          <div className="space-y-1">
+            <div className="flex items-baseline justify-between">
+              <span className="text-xs font-semibold text-slate-700 dark:text-slate-300">
+                Phí ship
+              </span>
+              <span className="text-base font-black text-emerald-600">
+                {shippingFee.toLocaleString('vi-VN')} đ
+              </span>
             </div>
+            <p className="text-[11px] text-emerald-600 font-medium">
+              Miễn phí trong bán kính 2km, tính 10.000 đ / km từ km thứ 2
+            </p>
+          </div>
 
-            {/* Voucher Input */}
-            <div className="flex gap-2">
-              <Input
-                value={voucherInput}
-                onChange={(e) => setVoucherInput(e.target.value)}
-                placeholder="Mã Voucher (FODELIVERY30)"
-                leftIcon={<Tag className="w-3.5 h-3.5 text-slate-400" />}
-              />
-              <Button variant="outline" size="sm" onClick={handleApplyVoucher}>
-                Áp dụng
-              </Button>
-            </div>
-
-            {/* Financial Breakdown & Shipping Fee Engine Readout */}
-            <div className="p-3.5 bg-slate-50 dark:bg-slate-800/60 rounded-xl space-y-2 text-xs border border-slate-200/80 dark:border-slate-800">
-              <div className="flex justify-between text-slate-600 dark:text-slate-400">
-                <span>Tạm tính món</span>
-                <span className="font-semibold">{formatVND(subtotal)}</span>
-              </div>
-
-              <div className="flex justify-between items-center text-slate-600 dark:text-slate-400">
-                <div>
-                  <span className="font-semibold">Phí giao hàng</span>
-                  <p className="text-[10px] text-slate-400 leading-tight">{feeBreakdown}</p>
-                </div>
-                <span className="font-bold text-orange-600 dark:text-orange-400">
-                  {calculatedShippingFee === 0 ? 'MIỄN PHÍ' : formatVND(calculatedShippingFee)}
-                </span>
-              </div>
-
-              {cart.discountAmount > 0 && (
-                <div className="flex justify-between text-emerald-600 font-bold">
-                  <span>Giảm giá</span>
-                  <span>-{formatVND(cart.discountAmount)}</span>
-                </div>
-              )}
-
-              <div className="pt-2 border-t border-slate-200 dark:border-slate-700 flex justify-between items-center">
-                <span className="font-bold text-sm text-slate-900 dark:text-slate-100">Tổng thanh toán</span>
-                <span className="font-black text-lg text-[#F97316]">{formatVND(grandTotal)}</span>
-              </div>
-            </div>
-
-            {/* Google Map Route Preview */}
+          {/* Driver Selection & Phone */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
             <div className="space-y-1.5">
-              <label className="text-xs font-semibold text-slate-700 dark:text-slate-300">Bản đồ Đường đi Google Maps</label>
-              <GoogleMapPlaceholder
-                height="h-36"
-                distanceKm={cart.distanceKm}
-                estimatedDurationMins={cart.estimatedDurationMins}
-                centerAddress={cart.deliveryAddress}
-              />
+              <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300">
+                Tên tài xế <span className="text-rose-500 font-bold">*</span>
+              </label>
+              <div className="relative">
+                <select
+                  value={cart.assignedDriverId}
+                  onChange={(e) => cart.setAssignedDriverId(e.target.value)}
+                  className="w-full appearance-none px-3 py-2 pr-8 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs text-slate-800 dark:text-slate-100 font-medium focus:outline-none focus:border-[#F97316] transition-colors cursor-pointer"
+                >
+                  {drivers.map((d) => (
+                    <option key={d.id} value={d.id}>
+                      {d.name}
+                    </option>
+                  ))}
+                </select>
+                <ChevronDown className="w-3.5 h-3.5 text-slate-400 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+              </div>
             </div>
 
-            {/* Driver & Payment Selectors */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-              <Select
-                label="Gán Tài xế Giao"
-                value={cart.assignedDriverId}
-                onChange={(e) => cart.setAssignedDriverId(e.target.value)}
-                options={drivers.map((d) => ({ value: d.id, label: d.name }))}
-                icon={<Bike className="w-4 h-4 text-slate-400" />}
-              />
-
-              <Select
-                label="Phương thức Thanh toán"
-                value={cart.paymentMethod}
-                onChange={(e) => cart.setPaymentMethod(e.target.value as PaymentMethod)}
-                options={[
-                  { value: 'CASH', label: '💵 Tiền mặt (COD)' },
-                  { value: 'ZALOPAY', label: '📱 ZaloPay' },
-                  { value: 'MOMOPAY', label: '🟣 Ví MoMo' },
-                  { value: 'BANK_TRANSFER', label: '🏦 Chuyển khoản' },
-                ]}
+            <div className="space-y-1.5">
+              <label className="block text-xs font-semibold text-slate-700 dark:text-slate-300">
+                Số điện thoại tài xế
+              </label>
+              <input
+                type="text"
+                readOnly
+                value={assignedDriver.phone}
+                className="w-full px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-xs text-slate-700 dark:text-slate-200 select-all"
               />
             </div>
-
-            {/* Action Buttons */}
-            <div className="flex items-center gap-2 pt-2">
-              <Button variant="outline" className="w-1/3" onClick={() => toast.success('Đã lưu bản nháp')}>
-                Lưu nháp
-              </Button>
-              <Button
-                variant="primary"
-                className="w-2/3"
-                onClick={handleCreateOrder}
-                leftIcon={<CheckCircle className="w-4 h-4" />}
-              >
-                Tạo Đơn Hàng
-              </Button>
-            </div>
-          </Card>
+          </div>
         </div>
       </div>
+
+      {/* Bottom Actions Bar */}
+      <div className="flex items-center justify-end gap-3 pt-2">
+        <button
+          type="button"
+          onClick={() => navigate('/orders')}
+          className="px-6 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-700 dark:text-slate-200 text-xs font-semibold hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors cursor-pointer shadow-xs"
+        >
+          Hủy
+        </button>
+
+        <button
+          type="button"
+          onClick={() => {
+            toast.success('Đã lưu bản nháp thành công!');
+          }}
+          className="px-6 py-2.5 rounded-xl border border-orange-200 dark:border-orange-800 bg-white dark:bg-slate-900 text-[#F97316] dark:text-orange-400 text-xs font-semibold hover:bg-orange-50 dark:hover:bg-orange-950/30 transition-colors cursor-pointer shadow-xs"
+        >
+          Lưu nháp
+        </button>
+
+        <button
+          type="button"
+          onClick={() => handleCreateOrderAndPrint(true)}
+          className="px-6 py-2.5 rounded-xl bg-[#F97316] hover:bg-[#EA580C] text-white text-xs font-bold shadow-md shadow-orange-500/20 transition-all cursor-pointer active:scale-98"
+        >
+          Tạo đơn và in
+        </button>
+      </div>
+
+      {/* Print Invoice Modal */}
+      <PrintInvoiceModal
+        isOpen={printModalOpen}
+        onClose={() => {
+          setPrintModalOpen(false);
+          if (createdOrderForPrint) {
+            navigate(`/orders/${createdOrderForPrint.id}`);
+          }
+        }}
+        order={createdOrderForPrint}
+      />
     </div>
   );
 };
