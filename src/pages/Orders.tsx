@@ -1,421 +1,280 @@
 import React, { useState, useMemo } from 'react';
-import { PageHeader } from '@/components/common/PageHeader';
-import { ChannelIcon } from '@/components/common/ChannelIcon';
-import { SearchBox } from '@/components/common/SearchBox';
-import { Tabs } from '@/components/ui/Tabs';
-import { Select } from '@/components/ui/Select';
-import { Table, Column } from '@/components/ui/Table';
-import { Badge } from '@/components/ui/Badge';
-import { Button } from '@/components/ui/Button';
-import { Drawer } from '@/components/ui/Drawer';
-import { Pagination } from '@/components/ui/Pagination';
+import { useNavigate } from 'react-router-dom';
+import { PrintInvoiceModal } from '@/components/common/PrintInvoiceModal';
 import { useOrderStore } from '@/stores/useOrderStore';
-import { useBranchStore } from '@/stores/useBranchStore';
-import { useDriverStore } from '@/stores/useDriverStore';
 import { Order, OrderStatus } from '@/types';
-import { formatVND } from '@/utils/shippingCalculator';
-import { useNavigate, useSearchParams } from 'react-router-dom';
-import { Plus, Eye, User, Phone, MapPin } from 'lucide-react';
+import {
+  Search,
+  Calendar,
+  ChevronDown,
+  Plus,
+  Eye,
+  Printer,
+  ChevronLeft,
+  ChevronRight,
+} from 'lucide-react';
 
 export const Orders: React.FC = () => {
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
-  const initialSearch = searchParams.get('search') || '';
+  const { orders } = useOrderStore();
 
-  const { orders, updateOrderStatus } = useOrderStore();
-  const branches = useBranchStore((state) => state.branches);
-  const drivers = useDriverStore((state) => state.drivers);
-
-  const [searchQuery, setSearchQuery] = useState(initialSearch);
-  const [activeTab, setActiveTab] = useState<OrderStatus | 'ALL'>('ALL');
-  const [selectedBranch, setSelectedBranch] = useState('ALL');
-  const [selectedDriver, setSelectedDriver] = useState('ALL');
-  const [selectedChannel, setSelectedChannel] = useState('ALL');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedStatus, setSelectedStatus] = useState<string>('ALL');
+  const [dateRange, setDateRange] = useState('01/05/2024 - 31/05/2024');
   const [currentPage, setCurrentPage] = useState(1);
-  const [previewOrderId, setPreviewOrderId] = useState<string | null>(null);
+  const [selectedOrderForPrint, setSelectedOrderForPrint] = useState<Order | null>(null);
 
-  // Filter logic
+  // Filter orders
   const filteredOrders = useMemo(() => {
     return orders.filter((ord) => {
       const matchesSearch =
         searchQuery === '' ||
         ord.code.toLowerCase().includes(searchQuery.toLowerCase()) ||
         ord.customerName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        ord.customerPhone.includes(searchQuery) ||
-        ord.deliveryAddress.toLowerCase().includes(searchQuery.toLowerCase());
+        ord.customerPhone.includes(searchQuery);
 
-      const matchesStatus = activeTab === 'ALL' || ord.status === activeTab;
-      const matchesBranch = selectedBranch === 'ALL' || ord.branchId === selectedBranch;
-      const matchesDriver = selectedDriver === 'ALL' || ord.driverId === selectedDriver;
-      const matchesChannel = selectedChannel === 'ALL' || ord.channel === selectedChannel;
+      const matchesStatus =
+        selectedStatus === 'ALL' ||
+        (selectedStatus === 'ON_DELIVERY' && ord.status === 'ON_DELIVERY') ||
+        (selectedStatus === 'DELIVERED' && ord.status === 'DELIVERED') ||
+        (selectedStatus === 'CANCELLED' && ord.status === 'CANCELLED');
 
-      return matchesSearch && matchesStatus && matchesBranch && matchesDriver && matchesChannel;
+      return matchesSearch && matchesStatus;
     });
-  }, [orders, searchQuery, activeTab, selectedBranch, selectedDriver, selectedChannel]);
+  }, [orders, searchQuery, selectedStatus]);
 
-  // Pagination logic
-  const itemsPerPage = 8;
+  const itemsPerPage = 5;
   const totalPages = Math.ceil(filteredOrders.length / itemsPerPage) || 1;
   const paginatedOrders = useMemo(() => {
     const start = (currentPage - 1) * itemsPerPage;
     return filteredOrders.slice(start, start + itemsPerPage);
   }, [filteredOrders, currentPage]);
 
-  const previewOrder = orders.find((o) => o.id === previewOrderId);
-
-  const statusTabs = [
-    { id: 'ALL', label: 'Tất cả đơn hàng', count: orders.length },
-    { id: 'PENDING', label: 'Chờ xử lý', count: orders.filter((o) => o.status === 'PENDING').length },
-    { id: 'PREPARING', label: 'Đang chế biến', count: orders.filter((o) => o.status === 'PREPARING').length },
-    { id: 'READY', label: 'Sẵn sàng giao', count: orders.filter((o) => o.status === 'READY').length },
-    { id: 'ON_DELIVERY', label: 'Đang giao hàng', count: orders.filter((o) => o.status === 'ON_DELIVERY').length },
-    { id: 'DELIVERED', label: 'Hoàn thành', count: orders.filter((o) => o.status === 'DELIVERED').length },
-  ];
-
-  const getStatusBadgeVariant = (status: OrderStatus) => {
+  const getStatusBadge = (status: OrderStatus) => {
     switch (status) {
-      case 'DELIVERED':
-        return 'success';
       case 'ON_DELIVERY':
-        return 'primary';
       case 'PREPARING':
       case 'READY':
-        return 'warning';
-      case 'CANCELLED':
-        return 'danger';
-      default:
-        return 'neutral';
-    }
-  };
-
-  const getStatusLabel = (status: OrderStatus) => {
-    switch (status) {
-      case 'PENDING':
-        return 'Chờ xử lý';
-      case 'PREPARING':
-        return 'Đang chế biến';
-      case 'READY':
-        return 'Sẵn sàng giao';
-      case 'ON_DELIVERY':
-        return 'Đang giao hàng';
+        return (
+          <span className="px-2.5 py-0.5 rounded text-xs font-semibold bg-blue-50 text-blue-600 border border-blue-200">
+            Đang giao
+          </span>
+        );
       case 'DELIVERED':
-        return 'Đã hoàn thành';
+        return (
+          <span className="px-2.5 py-0.5 rounded text-xs font-semibold bg-emerald-50 text-emerald-600 border border-emerald-200">
+            Đã giao
+          </span>
+        );
       case 'CANCELLED':
-        return 'Đã hủy';
+        return (
+          <span className="px-2.5 py-0.5 rounded text-xs font-semibold bg-rose-50 text-rose-600 border border-rose-200">
+            Đã hủy
+          </span>
+        );
       default:
-        return status;
+        return (
+          <span className="px-2.5 py-0.5 rounded text-xs font-semibold bg-slate-100 text-slate-600 border border-slate-200">
+            Chờ xử lý
+          </span>
+        );
     }
   };
-
-  const columns: Column<Order>[] = [
-    {
-      header: 'Mã đơn hàng',
-      accessor: 'code',
-      cell: (item) => (
-        <div className="flex items-center gap-2">
-          <span className="font-extrabold text-slate-900 dark:text-slate-100">{item.code}</span>
-          <ChannelIcon channel={item.channel} size="sm" />
-        </div>
-      ),
-    },
-    {
-      header: 'Khách hàng',
-      cell: (item) => (
-        <div>
-          <div className="font-bold text-xs text-slate-900 dark:text-slate-100">{item.customerName}</div>
-          <div className="text-[11px] text-slate-400">{item.customerPhone}</div>
-        </div>
-      ),
-    },
-    {
-      header: 'Địa chỉ giao hàng',
-      cell: (item) => (
-        <div className="max-w-xs truncate text-xs text-slate-600 dark:text-slate-300" title={item.deliveryAddress}>
-          {item.deliveryAddress}
-        </div>
-      ),
-    },
-    {
-      header: 'Chi nhánh',
-      cell: (item) => <span className="text-xs font-semibold text-slate-700 dark:text-slate-300">{item.branchName}</span>,
-    },
-    {
-      header: 'Tài xế',
-      cell: (item) =>
-        item.driverName ? (
-          <div className="text-xs font-semibold text-slate-800 dark:text-slate-200">{item.driverName}</div>
-        ) : (
-          <span className="text-xs font-medium text-amber-600 bg-amber-50 px-2 py-0.5 rounded-md">Chưa gán</span>
-        ),
-    },
-    {
-      header: 'Tổng tiền',
-      cell: (item) => (
-        <div>
-          <div className="font-extrabold text-xs text-slate-900 dark:text-slate-100">{formatVND(item.total)}</div>
-          <div className="text-[10px] text-slate-400">Ship: {formatVND(item.shippingFee)}</div>
-        </div>
-      ),
-    },
-    {
-      header: 'Trạng thái',
-      cell: (item) => (
-        <Badge variant={getStatusBadgeVariant(item.status)} size="sm">
-          {getStatusLabel(item.status)}
-        </Badge>
-      ),
-    },
-    {
-      header: 'Thao tác',
-      cell: (item) => (
-        <div className="flex items-center gap-2">
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={(e) => {
-              e.stopPropagation();
-              setPreviewOrderId(item.id);
-            }}
-          >
-            <Eye className="w-4 h-4 text-slate-500" />
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={(e) => {
-              e.stopPropagation();
-              navigate(`/orders/${item.id}`);
-            }}
-          >
-            Chi tiết
-          </Button>
-        </div>
-      ),
-    },
-  ];
 
   return (
-    <div className="space-y-6 animate-in fade-in duration-200">
-      <PageHeader
-        title="Quản lý Đơn hàng Đa kênh"
-        subtitle="Lọc, theo dõi tiến độ và xử lý đơn hàng giao từ Phone, Facebook, Zalo, Website."
-        action={
-          <Button
-            variant="primary"
-            leftIcon={<Plus className="w-4 h-4" />}
-            onClick={() => navigate('/orders/new')}
-          >
-            Tạo đơn mới
-          </Button>
-        }
-      />
+    <div className="space-y-4 animate-in fade-in duration-200 pb-10">
+      {/* Top Filter & Actions Bar */}
+      <div className="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-xs flex flex-wrap items-center justify-between gap-3">
+        <div className="flex flex-wrap items-center gap-3 flex-1 min-w-[300px]">
+          {/* Search Box */}
+          <div className="relative flex-1 min-w-[220px] max-w-sm">
+            <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => {
+                setSearchQuery(e.target.value);
+                setCurrentPage(1);
+              }}
+              placeholder="Tìm kiếm đơn hàng, sđt, tên khách..."
+              className="w-full pl-9 pr-3.5 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs text-slate-800 dark:text-slate-100 placeholder:text-slate-400 focus:outline-none focus:border-[#F97316] transition-colors"
+            />
+          </div>
 
-      {/* Status Filter Tabs */}
-      <Tabs
-        tabs={statusTabs}
-        activeTabId={activeTab}
-        onTabChange={(id) => {
-          setActiveTab(id as OrderStatus | 'ALL');
-          setCurrentPage(1);
-        }}
-        variant="underline"
-      />
+          {/* Date Picker Range Filter */}
+          <div className="relative">
+            <div className="flex items-center gap-2 px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 text-xs font-medium text-slate-700 dark:text-slate-300 bg-white dark:bg-slate-900">
+              <Calendar className="w-3.5 h-3.5 text-slate-400" />
+              <span>{dateRange}</span>
+              <ChevronDown className="w-3.5 h-3.5 text-slate-400 ml-1" />
+            </div>
+          </div>
 
-      {/* Advanced Search & Filter Controls */}
-      <div className="p-4 bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-2xl soft-shadow space-y-4">
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
-          <SearchBox
-            value={searchQuery}
-            onChange={(val) => {
-              setSearchQuery(val);
-              setCurrentPage(1);
-            }}
-            placeholder="Tìm mã đơn, SĐT, địa chỉ..."
-          />
+          {/* Status Dropdown */}
+          <div className="relative">
+            <select
+              value={selectedStatus}
+              onChange={(e) => {
+                setSelectedStatus(e.target.value);
+                setCurrentPage(1);
+              }}
+              className="appearance-none px-3 py-2 pr-8 rounded-xl border border-slate-200 dark:border-slate-700 text-xs font-medium text-slate-700 dark:text-slate-300 bg-white dark:bg-slate-900 focus:outline-none focus:border-[#F97316] cursor-pointer"
+            >
+              <option value="ALL">Trạng thái (Tất cả)</option>
+              <option value="ON_DELIVERY">Đang giao</option>
+              <option value="DELIVERED">Đã giao</option>
+              <option value="CANCELLED">Đã hủy</option>
+            </select>
+            <ChevronDown className="w-3.5 h-3.5 text-slate-400 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+          </div>
+        </div>
 
-          <Select
-            value={selectedBranch}
-            onChange={(e) => {
-              setSelectedBranch(e.target.value);
-              setCurrentPage(1);
-            }}
-            options={[
-              { value: 'ALL', label: 'Tất cả Chi nhánh' },
-              ...branches.map((b) => ({ value: b.id, label: b.name })),
-            ]}
-          />
+        {/* Create Order Button */}
+        <button
+          type="button"
+          onClick={() => navigate('/orders/new')}
+          className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#F97316] hover:bg-[#EA580C] text-white text-xs font-bold shadow-sm shadow-orange-500/20 transition-colors cursor-pointer"
+        >
+          <Plus className="w-4 h-4" />
+          <span>Tạo đơn mới</span>
+        </button>
+      </div>
 
-          <Select
-            value={selectedDriver}
-            onChange={(e) => {
-              setSelectedDriver(e.target.value);
-              setCurrentPage(1);
-            }}
-            options={[
-              { value: 'ALL', label: 'Tất cả Tài xế' },
-              ...drivers.map((d) => ({ value: d.id, label: d.name })),
-            ]}
-          />
+      {/* Orders Table Container */}
+      <div className="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-2xl shadow-xs overflow-hidden">
+        <div className="overflow-x-auto">
+          <table className="w-full text-left text-xs">
+            <thead className="bg-slate-50 dark:bg-slate-800/50 text-slate-500 dark:text-slate-400 font-bold border-b border-slate-200/80 dark:border-slate-800">
+              <tr>
+                <th className="py-3 px-4">Mã đơn</th>
+                <th className="py-3 px-4">Khách hàng</th>
+                <th className="py-3 px-4">SĐT</th>
+                <th className="py-3 px-4">Tổng tiền</th>
+                <th className="py-3 px-4">Trạng thái</th>
+                <th className="py-3 px-4">Tài xế</th>
+                <th className="py-3 px-4">Thời gian</th>
+                <th className="py-3 px-4 text-center">Thao tác</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-100 dark:divide-slate-800 text-slate-800 dark:text-slate-200">
+              {paginatedOrders.map((ord) => (
+                <tr
+                  key={ord.id}
+                  onClick={() => navigate(`/orders/${ord.id}`)}
+                  className="hover:bg-slate-50/80 dark:hover:bg-slate-800/50 transition-colors cursor-pointer"
+                >
+                  {/* Mã đơn */}
+                  <td className="py-3.5 px-4 font-bold text-slate-900 dark:text-slate-100">
+                    {ord.code}
+                  </td>
 
-          <Select
-            value={selectedChannel}
-            onChange={(e) => {
-              setSelectedChannel(e.target.value);
-              setCurrentPage(1);
-            }}
-            options={[
-              { value: 'ALL', label: 'Tất cả Kênh' },
-              { value: 'PHONE', label: 'Gọi điện (Phone)' },
-              { value: 'FACEBOOK', label: 'Facebook Messenger' },
-              { value: 'ZALO', label: 'Zalo OA' },
-              { value: 'WEBSITE', label: 'Website' },
-              { value: 'POS', label: 'Quầy POS' },
-            ]}
-          />
+                  {/* Khách hàng */}
+                  <td className="py-3.5 px-4 font-medium text-slate-800 dark:text-slate-200">
+                    {ord.customerName}
+                  </td>
+
+                  {/* SĐT */}
+                  <td className="py-3.5 px-4 font-mono text-slate-600 dark:text-slate-400">
+                    {ord.customerPhone}
+                  </td>
+
+                  {/* Tổng tiền */}
+                  <td className="py-3.5 px-4 font-semibold text-slate-900 dark:text-white">
+                    {ord.total.toLocaleString('vi-VN')} đ
+                  </td>
+
+                  {/* Trạng thái */}
+                  <td className="py-3.5 px-4">
+                    {getStatusBadge(ord.status)}
+                  </td>
+
+                  {/* Tài xế */}
+                  <td className="py-3.5 px-4 text-slate-600 dark:text-slate-400">
+                    {ord.driverName || '-'}
+                  </td>
+
+                  {/* Thời gian */}
+                  <td className="py-3.5 px-4 text-slate-500 dark:text-slate-400">
+                    {ord.createdAt}
+                  </td>
+
+                  {/* Thao tác */}
+                  <td className="py-3.5 px-4">
+                    <div className="flex items-center justify-center gap-2">
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          navigate(`/orders/${ord.id}`);
+                        }}
+                        className="p-1.5 text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 transition-colors cursor-pointer"
+                        title="Xem chi tiết"
+                      >
+                        <Eye className="w-4 h-4" />
+                      </button>
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setSelectedOrderForPrint(ord);
+                        }}
+                        className="p-1.5 text-slate-400 hover:text-[#F97316] transition-colors cursor-pointer"
+                        title="In hóa đơn"
+                      >
+                        <Printer className="w-4 h-4" />
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        {/* Footer Pagination */}
+        <div className="p-4 border-t border-slate-100 dark:border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-500">
+          <div>
+            Hiển thị 1 - {paginatedOrders.length} của {filteredOrders.length} đơn hàng
+          </div>
+
+          <div className="flex items-center gap-1">
+            <button
+              onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+              disabled={currentPage === 1}
+              className="p-1.5 rounded-lg border border-slate-200 dark:border-slate-700 disabled:opacity-40 hover:bg-slate-50 dark:hover:bg-slate-800 cursor-pointer disabled:cursor-not-allowed"
+            >
+              <ChevronLeft className="w-3.5 h-3.5" />
+            </button>
+            {Array.from({ length: totalPages }).map((_, i) => (
+              <button
+                key={i + 1}
+                onClick={() => setCurrentPage(i + 1)}
+                className={`w-7 h-7 rounded-lg text-xs font-bold transition-colors cursor-pointer ${
+                  currentPage === i + 1
+                    ? 'bg-[#F97316] text-white shadow-xs'
+                    : 'border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300'
+                }`}
+              >
+                {i + 1}
+              </button>
+            ))}
+            <button
+              onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+              disabled={currentPage === totalPages}
+              className="p-1.5 rounded-lg border border-slate-200 dark:border-slate-700 disabled:opacity-40 hover:bg-slate-50 dark:hover:bg-slate-800 cursor-pointer disabled:cursor-not-allowed"
+            >
+              <ChevronRight className="w-3.5 h-3.5" />
+            </button>
+          </div>
         </div>
       </div>
 
-      {/* Orders Table */}
-      <Table
-        columns={columns}
-        data={paginatedOrders}
-        keyExtractor={(item) => item.id}
-        onRowClick={(item) => navigate(`/orders/${item.id}`)}
+      {/* Print Invoice Modal */}
+      <PrintInvoiceModal
+        isOpen={!!selectedOrderForPrint}
+        onClose={() => setSelectedOrderForPrint(null)}
+        order={selectedOrderForPrint}
       />
-
-      {/* Pagination */}
-      <Pagination
-        currentPage={currentPage}
-        totalPages={totalPages}
-        onPageChange={(p) => setCurrentPage(p)}
-        totalItems={filteredOrders.length}
-        itemsPerPage={itemsPerPage}
-      />
-
-      {/* Quick View Drawer */}
-      <Drawer
-        isOpen={!!previewOrderId}
-        onClose={() => setPreviewOrderId(null)}
-        title={`Xem nhanh đơn hàng - ${previewOrder?.code}`}
-        subtitle="Tổng quan chi tiết & điều phối nhanh"
-        width="lg"
-      >
-        {previewOrder && (
-          <div className="space-y-6">
-            <div className="p-4 bg-orange-50 dark:bg-orange-950/40 rounded-2xl border border-orange-200 dark:border-orange-900 flex items-center justify-between">
-              <div>
-                <span className="text-[10px] uppercase font-bold text-[#F97316]">Trạng thái hiện tại</span>
-                <div className="flex items-center gap-2 mt-0.5">
-                  <Badge variant={getStatusBadgeVariant(previewOrder.status)}>
-                    {getStatusLabel(previewOrder.status)}
-                  </Badge>
-                  <span className="text-xs text-slate-500">• Kênh: {previewOrder.channel}</span>
-                </div>
-              </div>
-
-              <div className="flex items-center gap-2">
-                {previewOrder.status === 'PENDING' && (
-                  <Button
-                    variant="primary"
-                    size="sm"
-                    onClick={() => updateOrderStatus(previewOrder.id, 'PREPARING')}
-                  >
-                    Duyệt nhận đơn
-                  </Button>
-                )}
-                {previewOrder.status === 'PREPARING' && (
-                  <Button
-                    variant="primary"
-                    size="sm"
-                    onClick={() => updateOrderStatus(previewOrder.id, 'READY')}
-                  >
-                    Báo Chế biến xong
-                  </Button>
-                )}
-                {previewOrder.status === 'READY' && (
-                  <Button
-                    variant="primary"
-                    size="sm"
-                    onClick={() => updateOrderStatus(previewOrder.id, 'ON_DELIVERY')}
-                  >
-                    Gán giao hàng
-                  </Button>
-                )}
-              </div>
-            </div>
-
-            {/* Customer & Address */}
-            <div className="space-y-3">
-              <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider">Thông tin Khách hàng</h4>
-              <div className="p-3.5 bg-slate-50 dark:bg-slate-800/60 rounded-xl space-y-2 text-xs">
-                <div className="flex items-center gap-2 font-bold text-slate-900 dark:text-slate-100">
-                  <User className="w-4 h-4 text-[#F97316]" /> {previewOrder.customerName}
-                </div>
-                <div className="flex items-center gap-2 text-slate-600 dark:text-slate-300">
-                  <Phone className="w-4 h-4 text-slate-400" /> {previewOrder.customerPhone}
-                </div>
-                <div className="flex items-start gap-2 text-slate-600 dark:text-slate-300">
-                  <MapPin className="w-4 h-4 text-rose-500 shrink-0 mt-0.5" /> {previewOrder.deliveryAddress}
-                </div>
-              </div>
-            </div>
-
-            {/* Itemized Cart */}
-            <div className="space-y-3">
-              <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider">Danh sách Món đặt</h4>
-              <div className="divide-y divide-slate-100 dark:divide-slate-800 border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden">
-                {previewOrder.items.map((item) => (
-                  <div key={item.id} className="p-3 flex items-center justify-between text-xs">
-                    <div className="flex items-center gap-3">
-                      {item.image && <img src={item.image} alt={item.name} className="w-10 h-10 rounded-lg object-cover" />}
-                      <div>
-                        <div className="font-bold text-slate-900 dark:text-slate-100">{item.name}</div>
-                        <div className="text-slate-400">SL: {item.quantity} × {formatVND(item.price)}</div>
-                      </div>
-                    </div>
-                    <div className="font-extrabold text-slate-900 dark:text-slate-100">
-                      {formatVND(item.price * item.quantity)}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            {/* Financial Summary */}
-            <div className="p-4 bg-slate-50 dark:bg-slate-800/40 rounded-xl space-y-2 text-xs border border-slate-200 dark:border-slate-800">
-              <div className="flex justify-between text-slate-600 dark:text-slate-400">
-                <span>Tiền món ăn</span>
-                <span>{formatVND(previewOrder.subtotal)}</span>
-              </div>
-              <div className="flex justify-between text-slate-600 dark:text-slate-400">
-                <span>Phí giao hàng ({previewOrder.distanceKm} km)</span>
-                <span>{formatVND(previewOrder.shippingFee)}</span>
-              </div>
-              {previewOrder.discount > 0 && (
-                <div className="flex justify-between text-emerald-600 font-semibold">
-                  <span>Giảm giá ({previewOrder.voucherCode})</span>
-                  <span>-{formatVND(previewOrder.discount)}</span>
-                </div>
-              )}
-              <div className="pt-2 border-t border-slate-200 dark:border-slate-700 flex justify-between font-black text-sm text-slate-900 dark:text-slate-100">
-                <span>Tổng cộng thanh toán</span>
-                <span className="text-[#F97316]">{formatVND(previewOrder.total)}</span>
-              </div>
-            </div>
-
-            <Button
-              variant="outline"
-              className="w-full"
-              onClick={() => {
-                setPreviewOrderId(null);
-                navigate(`/orders/${previewOrder.id}`);
-              }}
-            >
-              Trang Chi tiết Đơn hàng đầy đủ
-            </Button>
-          </div>
-        )}
-      </Drawer>
     </div>
   );
 };
