@@ -1,0 +1,18 @@
+{
+  "name": "FoDelivery AI - Quản lý Giao hàng & POS",
+  "short_name": "FoDelivery",
+  "description": "Phần mềm quản lý giao hàng và POS đa kênh cho chuỗi nhà hàng và F&B.",
+  "lang": "vi-VN",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#F8FAFC",
+  "theme_color": "#F97316",
+  "icons": [
+    {
+      "src": "/fodelivery-logo.png",
+      "sizes": "1280x1280",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}
