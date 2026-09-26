@@ -11,6 +11,9 @@ export const AuthLogo: React.FC<AuthLogoProps> = ({ centered = false }) => (
     <img
       src={fodeliveryLogo}
       alt="Logo FoDelivery"
+      width="56"
+      height="56"
+      decoding="async"
       className="h-14 w-14 shrink-0 object-contain"
     />
 
