@@ -1,5 +1,6 @@
 import React from 'react';
-import { ArrowRight, Eye, EyeOff, LockKeyhole, Mail } from 'lucide-react';
+import { clsx } from 'clsx';
+import { AlertCircle, ArrowRight, Eye, EyeOff, LockKeyhole, Mail } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { DEMO_CREDENTIALS } from '@/modules/auth/constants';
 import { AuthLogo } from '@/modules/auth/components/AuthLogo';
@@ -8,6 +9,7 @@ import { useLoginForm } from '@/modules/auth/hooks/useLoginForm';
 export const LoginForm: React.FC = () => {
   const {
     credentials,
+    errors,
     showPassword,
     updateCredential,
     togglePasswordVisibility,
@@ -20,13 +22,18 @@ export const LoginForm: React.FC = () => {
       <div className="mx-auto w-full min-w-0 max-w-[470px]">
         <AuthLogo centered />
 
-        <form onSubmit={handleSubmit} className="mt-10 space-y-5">
+        <form onSubmit={handleSubmit} noValidate className="mt-10 space-y-5">
           <div className="space-y-2">
             <label htmlFor="login-email" className="text-sm font-bold text-slate-800">
-              Email công việc
+              Email công việc <span className="text-red-500">*</span>
             </label>
             <div className="relative">
-              <Mail className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-500" />
+              <Mail
+                className={clsx(
+                  'pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2',
+                  errors.email ? 'text-red-500' : 'text-slate-500'
+                )}
+              />
               <input
                 id="login-email"
                 type="email"
@@ -34,17 +41,35 @@ export const LoginForm: React.FC = () => {
                 value={credentials.email}
                 onChange={(event) => updateCredential('email', event.target.value)}
                 placeholder="Nhập email công việc"
-                className="h-13 w-full rounded-xl border border-slate-300 bg-slate-50 pl-12 pr-4 text-sm font-medium text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-[#F97316] focus:bg-white focus:ring-4 focus:ring-orange-100"
+                aria-invalid={Boolean(errors.email)}
+                aria-describedby={errors.email ? 'login-email-error' : undefined}
+                className={clsx(
+                  'h-13 w-full rounded-xl border bg-slate-50 pl-12 pr-4 text-sm font-medium text-slate-900 outline-none transition placeholder:text-slate-400 focus:bg-white focus:ring-4',
+                  errors.email
+                    ? 'border-red-500 bg-red-50/40 focus:border-red-500 focus:ring-red-100'
+                    : 'border-slate-300 focus:border-[#F97316] focus:ring-orange-100'
+                )}
               />
             </div>
+            {errors.email && (
+              <p id="login-email-error" className="flex items-center gap-1.5 text-xs font-medium text-red-500">
+                <AlertCircle className="h-3.5 w-3.5 shrink-0" />
+                {errors.email}
+              </p>
+            )}
           </div>
 
           <div className="space-y-2">
             <label htmlFor="login-password" className="text-sm font-bold text-slate-800">
-              Mật khẩu
+              Mật khẩu <span className="text-red-500">*</span>
             </label>
             <div className="relative">
-              <LockKeyhole className="pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-500" />
+              <LockKeyhole
+                className={clsx(
+                  'pointer-events-none absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2',
+                  errors.password ? 'text-red-500' : 'text-slate-500'
+                )}
+              />
               <input
                 id="login-password"
                 type={showPassword ? 'text' : 'password'}
@@ -52,7 +77,14 @@ export const LoginForm: React.FC = () => {
                 value={credentials.password}
                 onChange={(event) => updateCredential('password', event.target.value)}
                 placeholder="Nhập mật khẩu"
-                className="h-13 w-full rounded-xl border border-slate-300 bg-slate-50 pl-12 pr-12 text-sm font-medium text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-[#F97316] focus:bg-white focus:ring-4 focus:ring-orange-100"
+                aria-invalid={Boolean(errors.password)}
+                aria-describedby={errors.password ? 'login-password-error' : undefined}
+                className={clsx(
+                  'h-13 w-full rounded-xl border bg-slate-50 pl-12 pr-12 text-sm font-medium text-slate-900 outline-none transition placeholder:text-slate-400 focus:bg-white focus:ring-4',
+                  errors.password
+                    ? 'border-red-500 bg-red-50/40 focus:border-red-500 focus:ring-red-100'
+                    : 'border-slate-300 focus:border-[#F97316] focus:ring-orange-100'
+                )}
               />
               <button
                 type="button"
@@ -63,6 +95,12 @@ export const LoginForm: React.FC = () => {
                 {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
               </button>
             </div>
+            {errors.password && (
+              <p id="login-password-error" className="flex items-center gap-1.5 text-xs font-medium text-red-500">
+                <AlertCircle className="h-3.5 w-3.5 shrink-0" />
+                {errors.password}
+              </p>
+            )}
           </div>
 
           <Button

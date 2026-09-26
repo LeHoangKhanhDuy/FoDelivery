@@ -1,9 +1,9 @@
-import React from 'react';
-import { Monitor, MousePointerClick, Store } from 'lucide-react';
-import loginPosHero from '@/assets/login-pos-hero.png';
-import { AUTH_FEATURES } from '@/modules/auth/constants';
-import type { AuthFeatureIcon } from '@/modules/auth/types';
-import { AuthLogo } from '@/modules/auth/components/AuthLogo';
+import React from "react";
+import { Monitor, MousePointerClick, Store } from "lucide-react";
+import loginPosHero from "@/assets/login-pos-hero.png";
+import { AUTH_FEATURES } from "@/modules/auth/constants";
+import type { AuthFeatureIcon } from "@/modules/auth/types/login-types";
+import { AuthLogo } from "@/modules/auth/components/AuthLogo";
 
 const featureIcons: Record<AuthFeatureIcon, React.ReactNode> = {
   desktop: <Monitor className="h-5 w-5" />,
@@ -22,7 +22,8 @@ export const LoginBrandPanel: React.FC = () => (
 
     <div className="relative z-10 mt-9">
       <h1 className="max-w-[390px] text-[38px] font-black leading-[1.2] tracking-tight">
-        Quản lý đơn hàng<br />
+        Quản lý đơn hàng
+        <br />
         <span className="text-[#F97316]">dễ dàng,</span> mọi thiết bị
       </h1>
 
@@ -34,7 +35,9 @@ export const LoginBrandPanel: React.FC = () => (
             </div>
             <div>
               <h2 className="text-sm font-bold">{feature.title}</h2>
-              <p className="mt-0.5 text-xs text-slate-400">{feature.description}</p>
+              <p className="mt-0.5 text-xs text-slate-400">
+                {feature.description}
+              </p>
             </div>
           </div>
         ))}
