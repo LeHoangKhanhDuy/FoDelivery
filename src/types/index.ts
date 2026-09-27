@@ -136,6 +136,10 @@ export interface Category {
   name: string;
   icon: string;
   itemCount: number;
+  description: string;
+  image: string;
+  sortOrder: number;
+  isVisible: boolean;
 }
 
 export type ShippingRuleType = 'PER_KM' | 'DISTANCE_RANGE' | 'DISTRICT' | 'FREE_SHIPPING';

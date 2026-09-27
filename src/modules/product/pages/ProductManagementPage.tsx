@@ -13,7 +13,11 @@ export const ProductManagementPage = () => {
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
 
   const handleToggleAvailability = (product: Product) => {
-    catalog.toggleProductStock(product.id);
+    const wasUpdated = catalog.toggleProductStock(product.id);
+    if (!wasUpdated) {
+      toast.error(`Không thể mở bán “${product.name}” vì danh mục đang bị ẩn`);
+      return;
+    }
     toast.success(
       product.isAvailable
         ? `Đã chuyển “${product.name}” sang hết hàng`
@@ -30,19 +34,23 @@ export const ProductManagementPage = () => {
 
     const { status, ...productValues } = values;
     if (selectedProduct) {
-      catalog.updateProduct({
+      const wasUpdated = catalog.updateProduct({
         ...selectedProduct,
         ...productValues,
         categoryName: category.name,
         isAvailable: status === 'active',
       });
+      if (!wasUpdated) {
+        toast.error(`Không thể mở bán sản phẩm vì danh mục “${category.name}” đang bị ẩn`);
+        return;
+      }
       setIsProductModalOpen(false);
       setSelectedProduct(null);
       toast.success(`Đã cập nhật “${values.name}”`);
       return;
     }
 
-    catalog.addProduct({
+    const wasAdded = catalog.addProduct({
       ...productValues,
       id: `product-${crypto.randomUUID()}`,
       categoryName: category.name,
@@ -50,6 +58,10 @@ export const ProductManagementPage = () => {
       rating: 5,
       orderCount: 0,
     });
+    if (!wasAdded) {
+      toast.error(`Không thể mở bán sản phẩm vì danh mục “${category.name}” đang bị ẩn`);
+      return;
+    }
     setIsProductModalOpen(false);
     toast.success(`Đã thêm “${values.name}” vào thực đơn`);
   };

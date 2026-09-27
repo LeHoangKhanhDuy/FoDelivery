@@ -3,23 +3,11 @@ import type {
   Customer, 
   Driver, 
   Branch, 
-  Category, 
   ShippingRule, 
   DashboardStats,
   NotificationItem 
 } from '@/types';
 import { MOCK_PRODUCTS } from '@/modules/product/mocks/products';
-
-export const MOCK_CATEGORIES: Category[] = [
-  { id: 'all', name: 'Tất cả', icon: 'Utensils', itemCount: 30 },
-  { id: 'cat-rice', name: 'Cơm', icon: 'HamBurger', itemCount: 8 },
-  { id: 'cat-noodle', name: 'Mì - Nui', icon: 'Pizza', itemCount: 6 },
-  { id: 'cat-soup', name: 'Món nước', icon: 'Coffee', itemCount: 4 },
-  { id: 'cat-side', name: 'Món ăn kèm', icon: 'Drumstick', itemCount: 5 },
-  { id: 'cat-milktea', name: 'Trà sữa', icon: 'Coffee', itemCount: 7 },
-  { id: 'cat-juice', name: 'Nước ép', icon: 'IceCream', itemCount: 5 },
-  { id: 'cat-other', name: 'Khác', icon: 'Utensils', itemCount: 4 },
-];
 
 export const MOCK_BRANCHES: Branch[] = [
   {

@@ -62,6 +62,9 @@ export const AppHeader: React.FC<AppHeaderProps> = ({ onToggleMobileMenu }) => {
     if (path === '/menu') {
       return <h1 className="text-lg sm:text-xl font-bold text-slate-900 ">Thực đơn</h1>;
     }
+    if (path === '/categories') {
+      return <h1 className="text-lg sm:text-xl font-bold text-slate-900 ">Danh mục sản phẩm</h1>;
+    }
     if (path === '/customers') {
       return <h1 className="text-lg sm:text-xl font-bold text-slate-900 ">Khách hàng</h1>;
     }
