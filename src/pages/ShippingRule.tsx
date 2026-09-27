@@ -55,7 +55,7 @@ export const ShippingRulePage: React.FC = () => {
               }}
               className={`space-y-3 transition-all ${
                 isSelected
-                  ? 'border-[#F97316] ring-2 ring-orange-500/20 bg-orange-50/20 dark:bg-orange-950/20'
+                  ? 'border-[#F97316] ring-2 ring-orange-500/20 bg-orange-50/20 '
                   : ''
               }`}
             >
@@ -66,7 +66,7 @@ export const ShippingRulePage: React.FC = () => {
                 {isSelected && <CheckCircle2 className="w-5 h-5 text-[#F97316]" />}
               </div>
               <div>
-                <h4 className="font-bold text-sm text-slate-900 dark:text-slate-100">{rule.name}</h4>
+                <h4 className="font-bold text-sm text-slate-900 ">{rule.name}</h4>
                 <p className="text-xs text-slate-500 mt-1">
                   Giá sàn: {formatVND(rule.baseFee)} + Đơn giá: {formatVND(rule.perKmRate)}/km
                 </p>
@@ -81,7 +81,7 @@ export const ShippingRulePage: React.FC = () => {
         {/* Left Column: Rule Parameters Form */}
         <div className="lg:col-span-7 space-y-4">
           <Card className="space-y-4">
-            <h3 className="text-sm font-bold text-slate-900 dark:text-slate-100 border-b border-slate-100 dark:border-slate-800 pb-3">
+            <h3 className="text-sm font-bold text-slate-900  border-b border-slate-100  pb-3">
               Cấu hình Thông số ({activeRule.name})
             </h3>
 

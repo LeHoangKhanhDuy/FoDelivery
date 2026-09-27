@@ -116,7 +116,7 @@ export const Dashboard: React.FC = () => {
           growthPercent={MOCK_DASHBOARD_STATS.avgTimeImprovementMins}
           growthLabel="nhanh hơn trung bình"
           icon={<Clock className="w-5 h-5" />}
-          iconBgColor="bg-emerald-50 text-emerald-600 dark:bg-emerald-950/50 dark:text-emerald-400"
+          iconBgColor="bg-emerald-50 text-emerald-600  "
         />
         <StatCard
           title="Doanh thu Phí Ship"
@@ -124,7 +124,7 @@ export const Dashboard: React.FC = () => {
           growthPercent={MOCK_DASHBOARD_STATS.shippingRevenueGrowthPercent}
           growthLabel="so với hôm qua"
           icon={<Truck className="w-5 h-5" />}
-          iconBgColor="bg-sky-50 text-sky-600 dark:bg-sky-950/50 dark:text-sky-400"
+          iconBgColor="bg-sky-50 text-sky-600  "
         />
       </div>
 
@@ -134,12 +134,12 @@ export const Dashboard: React.FC = () => {
         <Card className="xl:col-span-2 space-y-4">
           <div className="flex items-center justify-between">
             <div>
-              <h3 className="text-base font-bold text-slate-900 dark:text-slate-100">
+              <h3 className="text-base font-bold text-slate-900 ">
                 Xu hướng Doanh thu & Đơn hàng trong ngày
               </h3>
               <p className="text-xs text-slate-500">Dữ liệu đơn hàng Đa kênh theo mốc giờ</p>
             </div>
-            <div title="Đang phát trực tiếp" className="p-2 rounded-full bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-200 dark:border-emerald-800/60 shadow-xs flex items-center justify-center">
+            <div title="Đang phát trực tiếp" className="p-2 rounded-full bg-emerald-50  border border-emerald-200  shadow-xs flex items-center justify-center">
               <span className="relative flex h-2.5 w-2.5">
                 <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
                 <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
@@ -177,7 +177,7 @@ export const Dashboard: React.FC = () => {
         {/* Hourly Orders Volume */}
         <Card className="space-y-4">
           <div>
-            <h3 className="text-base font-bold text-slate-900 dark:text-slate-100">
+            <h3 className="text-base font-bold text-slate-900 ">
               Khung giờ Cao điểm
             </h3>
             <p className="text-xs text-slate-500">Số lượng đơn hàng mỗi 2 giờ</p>
@@ -203,7 +203,7 @@ export const Dashboard: React.FC = () => {
         <Card className="xl:col-span-2 space-y-4">
           <div className="flex items-center justify-between">
             <div>
-              <h3 className="text-base font-bold text-slate-900 dark:text-slate-100">Đơn hàng mới nhận</h3>
+              <h3 className="text-base font-bold text-slate-900 ">Đơn hàng mới nhận</h3>
               <p className="text-xs text-slate-500">Danh sách đơn đa kênh đang xử lý</p>
             </div>
             <Button
@@ -215,18 +215,18 @@ export const Dashboard: React.FC = () => {
             </Button>
           </div>
 
-          <div className="divide-y divide-slate-100 dark:divide-slate-800">
+          <div className="divide-y divide-slate-100 ">
             {recentOrders.map((ord) => (
               <div
                 key={ord.id}
                 onClick={() => navigate(`/orders/${ord.id}`)}
-                className="py-3 flex flex-col sm:flex-row sm:items-center justify-between hover:bg-slate-50/80 dark:hover:bg-slate-800/40 rounded-xl px-2 transition-colors cursor-pointer gap-2"
+                className="py-3 flex flex-col sm:flex-row sm:items-center justify-between hover:bg-slate-50/80  rounded-xl px-2 transition-colors cursor-pointer gap-2"
               >
                 <div className="flex items-center gap-3">
                   <ChannelIcon channel={ord.channel} size="md" />
                   <div className="min-w-0">
                     <div className="flex items-center gap-2">
-                      <span className="font-bold text-xs text-slate-900 dark:text-slate-100">{ord.code}</span>
+                      <span className="font-bold text-xs text-slate-900 ">{ord.code}</span>
                       <span className="text-xs text-slate-500 truncate">• {ord.customerName}</span>
                     </div>
                     <p className="text-[11px] text-slate-400 truncate max-w-sm">{ord.deliveryAddress}</p>
@@ -235,7 +235,7 @@ export const Dashboard: React.FC = () => {
 
                 <div className="flex items-center justify-between sm:justify-end gap-4 text-right">
                   <div>
-                    <div className="font-extrabold text-xs text-slate-900 dark:text-slate-100">
+                    <div className="font-extrabold text-xs text-slate-900 ">
                       {formatVND(ord.total)}
                     </div>
                     <div className="text-[10px] text-slate-400">{ord.items.length} món</div>
@@ -254,7 +254,7 @@ export const Dashboard: React.FC = () => {
           {/* Top Drivers */}
           <Card className="space-y-3">
             <div className="flex items-center justify-between">
-              <h3 className="text-sm font-bold text-slate-900 dark:text-slate-100">Tài xế tiêu biểu</h3>
+              <h3 className="text-sm font-bold text-slate-900 ">Tài xế tiêu biểu</h3>
               <Button variant="ghost" size="sm" onClick={() => navigate('/drivers')}>
                 Xem đội ngũ
               </Button>
@@ -263,19 +263,19 @@ export const Dashboard: React.FC = () => {
               {drivers.slice(0, 3).map((driver) => (
                 <div
                   key={driver.id}
-                  className="flex items-center justify-between p-2.5 rounded-xl border border-slate-100 dark:border-slate-800 bg-slate-50/50 dark:bg-slate-800/40"
+                  className="flex items-center justify-between p-2.5 rounded-xl border border-slate-100  bg-slate-50/50 "
                 >
                   <div className="flex items-center gap-2.5">
                     <Avatar src={driver.avatar} name={driver.name} size="sm" status={driver.status === 'ONLINE' ? 'online' : 'busy'} />
                     <div>
-                      <h4 className="text-xs font-bold text-slate-900 dark:text-slate-100">{driver.name}</h4>
+                      <h4 className="text-xs font-bold text-slate-900 ">{driver.name}</h4>
                       <p className="text-[10px] text-slate-400 flex items-center gap-1">
                         <Star className="w-3 h-3 text-amber-400 fill-amber-400" />
                         {driver.rating} • {driver.completedDeliveriesToday} đơn hôm nay
                       </p>
                     </div>
                   </div>
-                  <span className="text-[11px] font-bold text-emerald-600 bg-emerald-50 dark:bg-emerald-950 dark:text-emerald-400 px-2 py-0.5 rounded-md">
+                  <span className="text-[11px] font-bold text-emerald-600 bg-emerald-50   px-2 py-0.5 rounded-md">
                     {driver.avgDeliveryMinutes}p trung bình
                   </span>
                 </div>
@@ -286,7 +286,7 @@ export const Dashboard: React.FC = () => {
           {/* Top Branches */}
           <Card className="space-y-3">
             <div className="flex items-center justify-between">
-              <h3 className="text-sm font-bold text-slate-900 dark:text-slate-100">Chi nhánh Đang mở</h3>
+              <h3 className="text-sm font-bold text-slate-900 ">Chi nhánh Đang mở</h3>
               <Button variant="ghost" size="sm" onClick={() => navigate('/branches')}>
                 Quản lý
               </Button>
@@ -295,14 +295,14 @@ export const Dashboard: React.FC = () => {
               {branches.map((b) => (
                 <div
                   key={b.id}
-                  className="flex items-center justify-between p-2.5 rounded-xl border border-slate-100 dark:border-slate-800"
+                  className="flex items-center justify-between p-2.5 rounded-xl border border-slate-100 "
                 >
                   <div className="flex items-center gap-2">
                     <div className="p-2 rounded-lg bg-orange-50 text-[#F97316] font-bold">
                       <MapPin className="w-3.5 h-3.5" />
                     </div>
                     <div>
-                      <h4 className="text-xs font-bold text-slate-900 dark:text-slate-100">{b.name}</h4>
+                      <h4 className="text-xs font-bold text-slate-900 ">{b.name}</h4>
                       <p className="text-[10px] text-slate-400">{b.activeOrdersCount} đơn đang xử lý</p>
                     </div>
                   </div>

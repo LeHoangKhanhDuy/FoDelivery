@@ -8,7 +8,7 @@ export const MainLayout: React.FC = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
-    <div className="min-h-screen flex bg-[#F8FAFC] dark:bg-[#0B0F19] text-slate-900 dark:text-slate-100 font-sans">
+    <div className="min-h-screen flex bg-[#F8FAFC]  text-slate-900  font-sans">
       {/* Desktop & Mobile Sidebar */}
       <AppSidebar
         collapsed={collapsed}

@@ -43,7 +43,7 @@ export const PrintInvoiceModal: React.FC<PrintInvoiceModalProps> = ({
     >
       <div className="grid grid-cols-1 md:grid-cols-12 gap-6 pt-1">
         {/* LEFT COLUMN: Thermal Bill 80mm Preview */}
-        <div className="md:col-span-7 bg-slate-100 dark:bg-slate-900/80 p-4 sm:p-6 rounded-2xl flex justify-center items-start overflow-y-auto max-h-[580px]">
+        <div className="md:col-span-7 bg-slate-100  p-4 sm:p-6 rounded-2xl flex justify-center items-start overflow-y-auto max-h-[580px]">
           <div className="w-full max-w-[340px] bg-white text-slate-900 p-5 rounded-lg shadow-md border border-slate-200 text-xs font-sans select-none">
             {/* Store Header */}
             {printLogo && (
@@ -183,7 +183,7 @@ export const PrintInvoiceModal: React.FC<PrintInvoiceModalProps> = ({
             />
 
             <div className="space-y-2.5 pt-1">
-              <label className="flex items-center gap-2 text-xs font-semibold text-slate-800 dark:text-slate-200 cursor-pointer select-none">
+              <label className="flex items-center gap-2 text-xs font-semibold text-slate-800  cursor-pointer select-none">
                 <input
                   type="checkbox"
                   checked={autoCut}
@@ -193,7 +193,7 @@ export const PrintInvoiceModal: React.FC<PrintInvoiceModalProps> = ({
                 <span>Cắt giấy tự động</span>
               </label>
 
-              <label className="flex items-center gap-2 text-xs font-semibold text-slate-800 dark:text-slate-200 cursor-pointer select-none">
+              <label className="flex items-center gap-2 text-xs font-semibold text-slate-800  cursor-pointer select-none">
                 <input
                   type="checkbox"
                   checked={printLogo}
@@ -206,7 +206,7 @@ export const PrintInvoiceModal: React.FC<PrintInvoiceModalProps> = ({
           </div>
 
           {/* Action Buttons */}
-          <div className="flex items-center justify-end gap-3 pt-4 border-t border-slate-100 dark:border-slate-800">
+          <div className="flex items-center justify-end gap-3 pt-4 border-t border-slate-100 ">
             <Button variant="outline" onClick={onClose}>
               Hủy
             </Button>

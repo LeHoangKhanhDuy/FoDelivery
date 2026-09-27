@@ -17,7 +17,7 @@ export const ProductCatalog = ({ products, viewMode, onToggleAvailability, onOpe
   }
 
   return (
-    <section aria-label="Danh sách món ăn" className={viewMode === 'grid' ? 'grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4' : 'grid grid-cols-1 gap-4 xl:grid-cols-2'}>
+    <section aria-label="Danh sách món ăn" className={viewMode === 'grid' ? 'grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-6' : 'grid grid-cols-1 gap-4 xl:grid-cols-2 2xl:grid-cols-3'}>
       {products.map((product) => (
         <ProductCard key={product.id} product={product} viewMode={viewMode} onToggleAvailability={onToggleAvailability} onOpenActions={onOpenActions} />
       ))}

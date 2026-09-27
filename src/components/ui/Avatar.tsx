@@ -24,9 +24,9 @@ export const Avatar: React.FC<AvatarProps> = ({
   };
 
   const statusColors = {
-    online: 'bg-emerald-500 ring-2 ring-white dark:ring-slate-900',
-    busy: 'bg-amber-500 ring-2 ring-white dark:ring-slate-900',
-    offline: 'bg-slate-400 ring-2 ring-white dark:ring-slate-900',
+    online: 'bg-emerald-500 ring-2 ring-white ',
+    busy: 'bg-amber-500 ring-2 ring-white ',
+    offline: 'bg-slate-400 ring-2 ring-white ',
   };
 
   const getInitials = (n: string) => {
@@ -43,12 +43,12 @@ export const Avatar: React.FC<AvatarProps> = ({
         <img
           src={src}
           alt={name}
-          className={clsx('rounded-full object-cover border border-slate-200 dark:border-slate-700', sizeStyles[size], className)}
+          className={clsx('rounded-full object-cover border border-slate-200 ', sizeStyles[size], className)}
         />
       ) : (
         <div
           className={clsx(
-            'rounded-full bg-orange-100 text-[#F97316] font-bold flex items-center justify-center border border-orange-200 dark:bg-orange-950 dark:text-orange-400 dark:border-orange-900',
+            'rounded-full bg-orange-100 text-[#F97316] font-bold flex items-center justify-center border border-orange-200   ',
             sizeStyles[size],
             className
           )}
