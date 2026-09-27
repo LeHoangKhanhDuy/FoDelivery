@@ -1,6 +1,7 @@
 import { create } from 'zustand';
-import { Product, Category } from '@/types';
-import { MOCK_PRODUCTS, MOCK_CATEGORIES } from '@/constants/mockData';
+import type { Product, Category } from '@/types';
+import { MOCK_CATEGORIES } from '@/constants/mockData';
+import { MOCK_PRODUCTS } from '@/modules/product/mocks';
 
 interface MenuState {
   products: Product[];
