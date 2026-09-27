@@ -41,7 +41,7 @@ export const Drivers: React.FC = () => {
             status={item.status === 'ONLINE' ? 'online' : item.status === 'BUSY' ? 'busy' : 'offline'}
           />
           <div>
-            <div className="font-bold text-xs text-slate-900 dark:text-slate-100">{item.name}</div>
+            <div className="font-bold text-xs text-slate-900 ">{item.name}</div>
             <div className="text-[11px] text-slate-400">{item.phone}</div>
           </div>
         </div>
@@ -51,7 +51,7 @@ export const Drivers: React.FC = () => {
       header: 'Phương tiện & Biển số',
       cell: (item) => (
         <div>
-          <div className="font-semibold text-xs text-slate-800 dark:text-slate-200">
+          <div className="font-semibold text-xs text-slate-800 ">
             {item.vehicleType === 'MOTORBIKE' ? 'Xe máy' : item.vehicleType === 'SCOOTER' ? 'Xe tay ga' : 'Ô tô'}
           </div>
           <div className="text-[10px] text-slate-400 font-mono">{item.vehiclePlate}</div>
@@ -72,19 +72,19 @@ export const Drivers: React.FC = () => {
     {
       header: 'Đã giao hôm nay',
       cell: (item) => (
-        <span className="font-bold text-xs text-slate-900 dark:text-slate-100">{item.completedDeliveriesToday} đơn</span>
+        <span className="font-bold text-xs text-slate-900 ">{item.completedDeliveriesToday} đơn</span>
       ),
     },
     {
       header: 'Thời gian giao TB',
       cell: (item) => (
-        <span className="font-semibold text-xs text-emerald-600 dark:text-emerald-400">{item.avgDeliveryMinutes} phút</span>
+        <span className="font-semibold text-xs text-emerald-600 ">{item.avgDeliveryMinutes} phút</span>
       ),
     },
     {
       header: 'Đánh giá',
       cell: (item) => (
-        <div className="flex items-center gap-1 text-xs font-bold text-slate-900 dark:text-slate-100">
+        <div className="flex items-center gap-1 text-xs font-bold text-slate-900 ">
           <Star className="w-3.5 h-3.5 text-amber-400 fill-amber-400" />
           <span>{item.rating}</span>
         </div>
@@ -122,19 +122,19 @@ export const Drivers: React.FC = () => {
           title="Tài xế Trực tuyến (Sẵn sàng)"
           value={`${onlineCount} tài xế`}
           icon={<Bike className="w-5 h-5" />}
-          iconBgColor="bg-emerald-50 text-emerald-600 dark:bg-emerald-950/50 dark:text-emerald-400"
+          iconBgColor="bg-emerald-50 text-emerald-600  "
         />
         <StatCard
           title="Đang trên đường giao hàng"
           value={`${busyCount} tài xế`}
           icon={<Navigation className="w-5 h-5" />}
-          iconBgColor="bg-orange-50 text-[#F97316] dark:bg-orange-950/50 dark:text-orange-400"
+          iconBgColor="bg-orange-50 text-[#F97316]  "
         />
         <StatCard
           title="Tài xế Ngoại tuyến"
           value={`${offlineCount} tài xế`}
           icon={<Clock className="w-5 h-5" />}
-          iconBgColor="bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-400"
+          iconBgColor="bg-slate-100 text-slate-600  "
         />
       </div>
 
@@ -151,7 +151,7 @@ export const Drivers: React.FC = () => {
                   status={driver.status === 'ONLINE' ? 'online' : driver.status === 'BUSY' ? 'busy' : 'offline'}
                 />
                 <div>
-                  <h4 className="text-xs font-bold text-slate-900 dark:text-slate-100">{driver.name}</h4>
+                  <h4 className="text-xs font-bold text-slate-900 ">{driver.name}</h4>
                   <p className="text-[10px] text-slate-400">{driver.vehiclePlate}</p>
                 </div>
               </div>
@@ -163,10 +163,10 @@ export const Drivers: React.FC = () => {
               </Badge>
             </div>
 
-            <div className="grid grid-cols-3 gap-2 pt-2 border-t border-slate-100 dark:border-slate-800 text-center text-xs">
+            <div className="grid grid-cols-3 gap-2 pt-2 border-t border-slate-100  text-center text-xs">
               <div>
                 <span className="text-[10px] text-slate-400 block">Đơn hôm nay</span>
-                <strong className="text-slate-900 dark:text-slate-100">{driver.completedDeliveriesToday}</strong>
+                <strong className="text-slate-900 ">{driver.completedDeliveriesToday}</strong>
               </div>
               <div>
                 <span className="text-[10px] text-slate-400 block">Đánh giá</span>

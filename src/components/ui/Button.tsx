@@ -34,11 +34,11 @@ export const Button: React.FC<ButtonProps> = ({
     primary:
       'bg-[#F97316] text-white hover:bg-[#EA580C] shadow-sm shadow-orange-500/20 focus:ring-[#F97316]',
     secondary:
-      'bg-orange-50 text-[#F97316] hover:bg-orange-100 dark:bg-slate-800 dark:text-orange-400 dark:hover:bg-slate-700 focus:ring-orange-300',
+      'bg-orange-50 text-[#F97316] hover:bg-orange-100    focus:ring-orange-300',
     outline:
-      'border border-slate-200 text-slate-700 bg-white hover:bg-slate-50 dark:border-slate-700 dark:text-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 focus:ring-slate-400',
+      'border border-slate-200 text-slate-700 bg-white hover:bg-slate-50     focus:ring-slate-400',
     ghost:
-      'text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800 focus:ring-slate-400',
+      'text-slate-600 hover:bg-slate-100   focus:ring-slate-400',
     danger:
       'bg-red-600 text-white hover:bg-red-700 shadow-sm shadow-red-500/20 focus:ring-red-500',
   };

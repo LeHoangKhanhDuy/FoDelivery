@@ -28,10 +28,10 @@ export function Table<T>({
   className,
 }: TableProps<T>) {
   return (
-    <div className={clsx('w-full overflow-x-auto rounded-2xl border border-slate-200/80 dark:border-slate-800 bg-white dark:bg-slate-900', className)}>
+    <div className={clsx('w-full overflow-x-auto rounded-2xl border border-slate-200/80  bg-white ', className)}>
       <table className="w-full text-left text-sm border-collapse">
         <thead>
-          <tr className="border-b border-slate-100 dark:border-slate-800 bg-slate-50/60 dark:bg-slate-800/40 text-slate-500 dark:text-slate-400 font-semibold text-xs">
+          <tr className="border-b border-slate-100  bg-slate-50/60  text-slate-500  font-semibold text-xs">
             {columns.map((col, idx) => (
               <th key={idx} className={clsx('px-4 py-3.5', col.className)}>
                 {col.header}
@@ -39,13 +39,13 @@ export function Table<T>({
             ))}
           </tr>
         </thead>
-        <tbody className="divide-y divide-slate-100 dark:divide-slate-800 text-slate-700 dark:text-slate-200">
+        <tbody className="divide-y divide-slate-100  text-slate-700 ">
           {isLoading ? (
             Array.from({ length: 5 }).map((_, rIdx) => (
               <tr key={rIdx} className="animate-pulse">
                 {columns.map((_, cIdx) => (
                   <td key={cIdx} className="px-4 py-4">
-                    <div className="h-4 bg-slate-200 dark:bg-slate-800 rounded w-24" />
+                    <div className="h-4 bg-slate-200  rounded w-24" />
                   </td>
                 ))}
               </tr>
@@ -62,7 +62,7 @@ export function Table<T>({
                 key={keyExtractor(item)}
                 onClick={() => onRowClick && onRowClick(item)}
                 className={clsx(
-                  'transition-colors hover:bg-slate-50/80 dark:hover:bg-slate-800/50',
+                  'transition-colors hover:bg-slate-50/80 ',
                   onRowClick && 'cursor-pointer'
                 )}
               >

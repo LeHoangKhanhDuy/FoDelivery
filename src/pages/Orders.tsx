@@ -84,7 +84,7 @@ export const Orders: React.FC = () => {
   return (
     <div className="space-y-4 animate-in fade-in duration-200 pb-10">
       {/* Top Filter & Actions Bar */}
-      <div className="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200/80 dark:border-slate-800 shadow-xs flex flex-wrap items-center justify-between gap-3">
+      <div className="bg-white  p-4 rounded-2xl border border-slate-200/80  shadow-xs flex flex-wrap items-center justify-between gap-3">
         <div className="flex flex-wrap items-center gap-3 flex-1 min-w-[300px]">
           {/* Search Box */}
           <div className="relative flex-1 min-w-[220px] max-w-sm">
@@ -97,13 +97,13 @@ export const Orders: React.FC = () => {
                 setCurrentPage(1);
               }}
               placeholder="Tìm kiếm đơn hàng, sđt, tên khách..."
-              className="w-full pl-9 pr-3.5 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs text-slate-800 dark:text-slate-100 placeholder:text-slate-400 focus:outline-none focus:border-[#F97316] transition-colors"
+              className="w-full pl-9 pr-3.5 py-2 rounded-xl border border-slate-200  bg-white  text-xs text-slate-800  placeholder:text-slate-400 focus:outline-none focus:border-[#F97316] transition-colors"
             />
           </div>
 
           {/* Date Picker Range Filter */}
           <div className="relative">
-            <div className="flex items-center gap-2 px-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 text-xs font-medium text-slate-700 dark:text-slate-300 bg-white dark:bg-slate-900">
+            <div className="flex items-center gap-2 px-3 py-2 rounded-xl border border-slate-200  text-xs font-medium text-slate-700  bg-white ">
               <Calendar className="w-3.5 h-3.5 text-slate-400" />
               <span>{dateRange}</span>
               <ChevronDown className="w-3.5 h-3.5 text-slate-400 ml-1" />
@@ -118,7 +118,7 @@ export const Orders: React.FC = () => {
                 setSelectedStatus(e.target.value);
                 setCurrentPage(1);
               }}
-              className="appearance-none px-3 py-2 pr-8 rounded-xl border border-slate-200 dark:border-slate-700 text-xs font-medium text-slate-700 dark:text-slate-300 bg-white dark:bg-slate-900 focus:outline-none focus:border-[#F97316] cursor-pointer"
+              className="appearance-none px-3 py-2 pr-8 rounded-xl border border-slate-200  text-xs font-medium text-slate-700  bg-white  focus:outline-none focus:border-[#F97316] cursor-pointer"
             >
               <option value="ALL">Trạng thái (Tất cả)</option>
               <option value="ON_DELIVERY">Đang giao</option>
@@ -141,10 +141,10 @@ export const Orders: React.FC = () => {
       </div>
 
       {/* Orders Table Container */}
-      <div className="bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-2xl shadow-xs overflow-hidden">
+      <div className="bg-white  border border-slate-200/80  rounded-2xl shadow-xs overflow-hidden">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs">
-            <thead className="bg-slate-50 dark:bg-slate-800/50 text-slate-500 dark:text-slate-400 font-bold border-b border-slate-200/80 dark:border-slate-800">
+            <thead className="bg-slate-50  text-slate-500  font-bold border-b border-slate-200/80 ">
               <tr>
                 <th className="py-3 px-4">Mã đơn</th>
                 <th className="py-3 px-4">Khách hàng</th>
@@ -156,30 +156,30 @@ export const Orders: React.FC = () => {
                 <th className="py-3 px-4 text-center">Thao tác</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-100 dark:divide-slate-800 text-slate-800 dark:text-slate-200">
+            <tbody className="divide-y divide-slate-100  text-slate-800 ">
               {paginatedOrders.map((ord) => (
                 <tr
                   key={ord.id}
                   onClick={() => navigate(`/orders/${ord.id}`)}
-                  className="hover:bg-slate-50/80 dark:hover:bg-slate-800/50 transition-colors cursor-pointer"
+                  className="hover:bg-slate-50/80  transition-colors cursor-pointer"
                 >
                   {/* Mã đơn */}
-                  <td className="py-3.5 px-4 font-bold text-slate-900 dark:text-slate-100">
+                  <td className="py-3.5 px-4 font-bold text-slate-900 ">
                     {ord.code}
                   </td>
 
                   {/* Khách hàng */}
-                  <td className="py-3.5 px-4 font-medium text-slate-800 dark:text-slate-200">
+                  <td className="py-3.5 px-4 font-medium text-slate-800 ">
                     {ord.customerName}
                   </td>
 
                   {/* SĐT */}
-                  <td className="py-3.5 px-4 font-mono text-slate-600 dark:text-slate-400">
+                  <td className="py-3.5 px-4 font-mono text-slate-600 ">
                     {ord.customerPhone}
                   </td>
 
                   {/* Tổng tiền */}
-                  <td className="py-3.5 px-4 font-semibold text-slate-900 dark:text-white">
+                  <td className="py-3.5 px-4 font-semibold text-slate-900 ">
                     {ord.total.toLocaleString('vi-VN')} đ
                   </td>
 
@@ -189,12 +189,12 @@ export const Orders: React.FC = () => {
                   </td>
 
                   {/* Tài xế */}
-                  <td className="py-3.5 px-4 text-slate-600 dark:text-slate-400">
+                  <td className="py-3.5 px-4 text-slate-600 ">
                     {ord.driverName || '-'}
                   </td>
 
                   {/* Thời gian */}
-                  <td className="py-3.5 px-4 text-slate-500 dark:text-slate-400">
+                  <td className="py-3.5 px-4 text-slate-500 ">
                     {ord.createdAt}
                   </td>
 
@@ -207,7 +207,7 @@ export const Orders: React.FC = () => {
                           e.stopPropagation();
                           navigate(`/orders/${ord.id}`);
                         }}
-                        className="p-1.5 text-slate-400 hover:text-slate-700 dark:hover:text-slate-200 transition-colors cursor-pointer"
+                        className="p-1.5 text-slate-400 hover:text-slate-700  transition-colors cursor-pointer"
                         title="Xem chi tiết"
                       >
                         <Eye className="w-4 h-4" />
@@ -232,7 +232,7 @@ export const Orders: React.FC = () => {
         </div>
 
         {/* Footer Pagination */}
-        <div className="p-4 border-t border-slate-100 dark:border-slate-800 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-500">
+        <div className="p-4 border-t border-slate-100  flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-500">
           <div>
             Hiển thị 1 - {paginatedOrders.length} của {filteredOrders.length} đơn hàng
           </div>
@@ -241,7 +241,7 @@ export const Orders: React.FC = () => {
             <button
               onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
               disabled={currentPage === 1}
-              className="p-1.5 rounded-lg border border-slate-200 dark:border-slate-700 disabled:opacity-40 hover:bg-slate-50 dark:hover:bg-slate-800 cursor-pointer disabled:cursor-not-allowed"
+              className="p-1.5 rounded-lg border border-slate-200  disabled:opacity-40 hover:bg-slate-50  cursor-pointer disabled:cursor-not-allowed"
             >
               <ChevronLeft className="w-3.5 h-3.5" />
             </button>
@@ -252,7 +252,7 @@ export const Orders: React.FC = () => {
                 className={`w-7 h-7 rounded-lg text-xs font-bold transition-colors cursor-pointer ${
                   currentPage === i + 1
                     ? 'bg-[#F97316] text-white shadow-xs'
-                    : 'border border-slate-200 dark:border-slate-700 hover:bg-slate-50 dark:hover:bg-slate-800 text-slate-700 dark:text-slate-300'
+                    : 'border border-slate-200  hover:bg-slate-50  text-slate-700 '
                 }`}
               >
                 {i + 1}
@@ -261,7 +261,7 @@ export const Orders: React.FC = () => {
             <button
               onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
               disabled={currentPage === totalPages}
-              className="p-1.5 rounded-lg border border-slate-200 dark:border-slate-700 disabled:opacity-40 hover:bg-slate-50 dark:hover:bg-slate-800 cursor-pointer disabled:cursor-not-allowed"
+              className="p-1.5 rounded-lg border border-slate-200  disabled:opacity-40 hover:bg-slate-50  cursor-pointer disabled:cursor-not-allowed"
             >
               <ChevronRight className="w-3.5 h-3.5" />
             </button>

@@ -31,13 +31,13 @@ export function DropdownItem({
       className={clsx(
         "group my-0.5 flex min-h-9 w-full cursor-pointer select-none items-center gap-3 rounded-lg px-3 py-2 text-left text-sm outline-none transition-colors",
         !active &&
-          "text-slate-700 hover:bg-slate-100 focus:bg-slate-100 dark:text-slate-200 dark:hover:bg-slate-700/60 dark:focus:bg-slate-700/60",
+          "text-slate-700 hover:bg-slate-100 focus:bg-slate-100   ",
         "disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50",
         danger &&
           !active &&
-          "text-red-600 focus:text-red-600 dark:text-red-400",
+          "text-red-600 focus:text-red-600 ",
         active &&
-          "bg-orange-50 text-orange-600 focus:bg-orange-100 dark:bg-orange-500/15 dark:text-orange-400",
+          "bg-orange-50 text-orange-600 focus:bg-orange-100  ",
         className,
       )}
     >
@@ -46,7 +46,7 @@ export function DropdownItem({
         className={clsx(
           danger
             ? "text-red-500"
-            : "text-slate-400 group-hover:text-slate-600 dark:group-hover:text-slate-200",
+            : "text-slate-400 group-hover:text-slate-600 ",
           active && "text-orange-500",
         )}
       />
@@ -55,7 +55,7 @@ export function DropdownItem({
         {description ? (
           <span
             className={clsx(
-              "mt-0.5 block truncate text-xs text-slate-500 dark:text-slate-400",
+              "mt-0.5 block truncate text-xs text-slate-500 ",
               active && "text-orange-500/80",
             )}
           >
@@ -66,7 +66,7 @@ export function DropdownItem({
       {shortcut ? (
         <span
           className={clsx(
-            "ml-auto shrink-0 text-xs font-medium text-slate-500 dark:text-slate-400",
+            "ml-auto shrink-0 text-xs font-medium text-slate-500 ",
             active && "text-orange-500/80",
           )}
         >

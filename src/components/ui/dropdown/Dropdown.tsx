@@ -78,7 +78,7 @@ export function Dropdown({
           style={contentStyle}
           onClick={() => setIsOpen(false)}
           className={clsx(
-            "absolute z-[10000] min-w-[180px] max-w-[calc(100vw-2rem)] overflow-hidden rounded-lg border border-slate-200 bg-white p-1 text-slate-800 shadow-xl shadow-slate-950/10 outline-none dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100 dark:shadow-black/30",
+            "absolute z-[10000] min-w-[180px] max-w-[calc(100vw-2rem)] overflow-hidden rounded-lg border border-slate-200 bg-white p-1 text-slate-800 shadow-xl shadow-slate-950/10 outline-none    ",
             "animate-in fade-in zoom-in-95 duration-100",
             alignmentClass,
             sideClass,

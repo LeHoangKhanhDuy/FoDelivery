@@ -25,7 +25,7 @@ export const ProductCard = ({ product, viewMode, onToggleAvailability, onOpenAct
 
   return (
     <Card padded={false} className={clsx('group border border-slate-100/80 shadow-sm shadow-slate-200/40 cursor-pointer', isListView ? 'grid min-h-44 grid-cols-1 sm:grid-cols-[240px_1fr]' : 'flex h-full flex-col')}>
-      <div className={clsx('relative overflow-hidden bg-slate-100 dark:bg-slate-800', isListView ? 'min-h-44' : 'aspect-[4/3]')}>
+      <div className={clsx('relative overflow-hidden bg-slate-100 ', isListView ? 'min-h-44' : 'aspect-[4/3]')}>
         <img
           src={product.image}
           alt=""
@@ -34,7 +34,7 @@ export const ProductCard = ({ product, viewMode, onToggleAvailability, onOpenAct
           decoding="async"
           className="absolute inset-0 h-full w-full scale-110 object-cover opacity-20 blur-xl"
         />
-        <div className="absolute inset-0 bg-white/45 dark:bg-slate-950/35" aria-hidden="true" />
+        <div className="absolute inset-0 bg-white/45 " aria-hidden="true" />
         <img
           src={product.image}
           alt={product.name}
@@ -52,13 +52,13 @@ export const ProductCard = ({ product, viewMode, onToggleAvailability, onOpenAct
 
       <div className="flex min-w-0 flex-1 flex-col p-4">
         <p className="text-[10px] font-extrabold uppercase tracking-wide text-slate-400">{product.categoryName}</p>
-        <h2 className="mt-0.5 line-clamp-1 text-sm font-extrabold text-slate-900 dark:text-slate-100">{product.name}</h2>
-        <p className="mt-1 line-clamp-2 text-xs leading-5 text-slate-500 dark:text-slate-400">{product.description}</p>
+        <h2 className="mt-0.5 line-clamp-1 text-sm font-extrabold text-slate-900 ">{product.name}</h2>
+        <p className="mt-1 line-clamp-2 text-xs leading-5 text-slate-500 ">{product.description}</p>
 
         <div className="mt-auto flex items-end justify-between gap-3 pt-3">
           <div className="min-w-0">
             <p className="text-sm font-extrabold text-[#F97316]">{formatVND(product.price)}</p>
-            <p className="mt-0.5 flex items-center gap-1 text-[11px] font-medium text-slate-500 dark:text-slate-400">
+            <p className="mt-0.5 flex items-center gap-1 text-[11px] font-medium text-slate-500 ">
               <Star className="h-3 w-3 fill-orange-500 text-orange-500" aria-hidden="true" />
               <span>{product.rating}</span>
               <span>({product.orderCount.toLocaleString('vi-VN')} đã bán)</span>

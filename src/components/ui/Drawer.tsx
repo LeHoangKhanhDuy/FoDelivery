@@ -58,16 +58,16 @@ export const Drawer: React.FC<DrawerProps> = ({
               animate={{ x: 0 }}
               exit={{ x: '100%' }}
               transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-              className={`w-screen ${widthClasses[width]} bg-white dark:bg-slate-900 border-l border-slate-200 dark:border-slate-800 shadow-2xl flex flex-col`}
+              className={`w-screen ${widthClasses[width]} bg-white  border-l border-slate-200  shadow-2xl flex flex-col`}
             >
-              <div className="p-5 border-b border-slate-100 dark:border-slate-800 flex items-center justify-between">
+              <div className="p-5 border-b border-slate-100  flex items-center justify-between">
                 <div>
-                  {title && <h3 className="text-lg font-bold text-slate-900 dark:text-slate-100">{title}</h3>}
-                  {subtitle && <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">{subtitle}</p>}
+                  {title && <h3 className="text-lg font-bold text-slate-900 ">{title}</h3>}
+                  {subtitle && <p className="text-xs text-slate-500  mt-0.5">{subtitle}</p>}
                 </div>
                 <button
                   onClick={onClose}
-                  className="p-1.5 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                  className="p-1.5 text-slate-400 hover:text-slate-600  rounded-lg hover:bg-slate-100  transition-colors"
                 >
                   <X className="w-5 h-5" />
                 </button>

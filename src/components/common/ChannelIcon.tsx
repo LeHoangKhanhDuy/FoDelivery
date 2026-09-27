@@ -55,17 +55,17 @@ export const ChannelIcon: React.FC<ChannelIconProps> = ({
   const getStyleClasses = () => {
     switch (channel) {
       case 'FACEBOOK':
-        return 'bg-blue-50 dark:bg-blue-950/60 text-[#1877F2] border-blue-200 dark:border-blue-800/60';
+        return 'bg-blue-50  text-[#1877F2] border-blue-200 ';
       case 'ZALO':
-        return 'bg-sky-50 dark:bg-sky-950/60 text-[#0068FF] border-sky-200 dark:border-sky-800/60';
+        return 'bg-sky-50  text-[#0068FF] border-sky-200 ';
       case 'PHONE':
-        return 'bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 border-emerald-200 dark:border-emerald-800/60';
+        return 'bg-emerald-50  text-emerald-600  border-emerald-200 ';
       case 'WEBSITE':
       case 'WEB':
-        return 'bg-purple-50 dark:bg-purple-950/60 text-purple-600 dark:text-purple-400 border-purple-200 dark:border-purple-800/60';
+        return 'bg-purple-50  text-purple-600  border-purple-200 ';
       case 'POS':
       default:
-        return 'bg-orange-50 dark:bg-orange-950/60 text-[#F97316] border-orange-200 dark:border-orange-800/60';
+        return 'bg-orange-50  text-[#F97316] border-orange-200 ';
     }
   };
 
@@ -96,7 +96,7 @@ export const ChannelIcon: React.FC<ChannelIconProps> = ({
         {renderIcon()}
       </div>
       {showLabel && (
-        <span className="text-xs font-semibold text-slate-800 dark:text-slate-200">
+        <span className="text-xs font-semibold text-slate-800 ">
           {getChannelLabel()}
         </span>
       )}

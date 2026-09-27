@@ -8,7 +8,7 @@ interface DropdownLabelProps {
 
 export function DropdownLabel({ children, className }: DropdownLabelProps) {
   return (
-    <div className={clsx("px-3 py-2 text-xs font-bold uppercase tracking-wide text-slate-500 dark:text-slate-400", className)}>
+    <div className={clsx("px-3 py-2 text-xs font-bold uppercase tracking-wide text-slate-500 ", className)}>
       {children}
     </div>
   );

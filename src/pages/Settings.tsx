@@ -37,7 +37,7 @@ export const SettingsPage: React.FC = () => {
 
       {activeTab === 'general' && (
         <Card className="space-y-4 max-w-2xl">
-          <h3 className="text-sm font-bold text-slate-900 dark:text-slate-100 border-b border-slate-100 dark:border-slate-800 pb-3">
+          <h3 className="text-sm font-bold text-slate-900  border-b border-slate-100  pb-3">
             Hồ sơ Doanh nghiệp & Hệ thống
           </h3>
           <Input label="Tên Hệ thống" defaultValue="FoDelivery AI SaaS" />
@@ -52,7 +52,7 @@ export const SettingsPage: React.FC = () => {
 
       {activeTab === 'maps' && (
         <Card className="space-y-4 max-w-2xl">
-          <h3 className="text-sm font-bold text-slate-900 dark:text-slate-100 border-b border-slate-100 dark:border-slate-800 pb-3">
+          <h3 className="text-sm font-bold text-slate-900  border-b border-slate-100  pb-3">
             Dịch vụ Google Maps API
           </h3>
           <Input
@@ -62,7 +62,7 @@ export const SettingsPage: React.FC = () => {
             leftIcon={<Key className="w-4 h-4 text-slate-400" />}
             helperText="Dùng để tính khoảng cách & thời gian di chuyển chính xác tại trang Tạo đơn POS."
           />
-          <div className="p-3 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 text-emerald-700 dark:text-emerald-300 rounded-xl text-xs flex items-center gap-2 font-semibold">
+          <div className="p-3 bg-emerald-50  border border-emerald-200 text-emerald-700  rounded-xl text-xs flex items-center gap-2 font-semibold">
             <ShieldCheck className="w-4 h-4" /> Đã kết nối Distance Matrix API & Places Autocomplete API
           </div>
           <Button variant="primary" onClick={() => toast.success('Đã cập nhật API Key Google Maps')}>
@@ -73,7 +73,7 @@ export const SettingsPage: React.FC = () => {
 
       {activeTab === 'omnichannel' && (
         <Card className="space-y-4 max-w-2xl">
-          <h3 className="text-sm font-bold text-slate-900 dark:text-slate-100 border-b border-slate-100 dark:border-slate-800 pb-3">
+          <h3 className="text-sm font-bold text-slate-900  border-b border-slate-100  pb-3">
             Kết nối Tích hợp Đa kênh
           </h3>
           <Input label="Zalo OA Secret Access Token" value={zaloOaToken} onChange={(e) => setZaloOaToken(e.target.value)} />
@@ -87,11 +87,11 @@ export const SettingsPage: React.FC = () => {
 
       {activeTab === 'printer' && (
         <Card className="space-y-4 max-w-2xl">
-          <h3 className="text-sm font-bold text-slate-900 dark:text-slate-100 border-b border-slate-100 dark:border-slate-800 pb-3">
+          <h3 className="text-sm font-bold text-slate-900  border-b border-slate-100  pb-3">
             Máy in Nhiệt Bếp & Hóa đơn POS
           </h3>
-          <div className="flex items-center justify-between p-3 bg-slate-50 dark:bg-slate-800 rounded-xl">
-            <span className="text-xs font-bold text-slate-800 dark:text-slate-200">Tự động in hóa đơn khi nhận đơn mới</span>
+          <div className="flex items-center justify-between p-3 bg-slate-50  rounded-xl">
+            <span className="text-xs font-bold text-slate-800 ">Tự động in hóa đơn khi nhận đơn mới</span>
             <Switch checked={thermalPrintOnOrder} onChange={setThermalPrintOnOrder} />
           </div>
           <Input label="Địa chỉ IP Máy in / USB Name" defaultValue="192.168.1.200:9100 (Máy in bếp 80mm)" />
@@ -103,11 +103,11 @@ export const SettingsPage: React.FC = () => {
 
       {activeTab === 'delivery' && (
         <Card className="space-y-4 max-w-2xl">
-          <h3 className="text-sm font-bold text-slate-900 dark:text-slate-100 border-b border-slate-100 dark:border-slate-800 pb-3">
+          <h3 className="text-sm font-bold text-slate-900  border-b border-slate-100  pb-3">
             Thông số Điều phối Giao hàng
           </h3>
-          <div className="flex items-center justify-between p-3 bg-slate-50 dark:bg-slate-800 rounded-xl">
-            <span className="text-xs font-bold text-slate-800 dark:text-slate-200">Tự động gán tài xế theo thuật toán vị trí gần nhất</span>
+          <div className="flex items-center justify-between p-3 bg-slate-50  rounded-xl">
+            <span className="text-xs font-bold text-slate-800 ">Tự động gán tài xế theo thuật toán vị trí gần nhất</span>
             <Switch checked={autoDispatch} onChange={setAutoDispatch} />
           </div>
           <Input label="Thời gian tối đa giao hàng (Phút)" defaultValue="45" />

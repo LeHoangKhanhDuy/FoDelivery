@@ -21,13 +21,13 @@ export const Pagination: React.FC<PaginationProps> = ({
   const endItem = totalItems && itemsPerPage ? Math.min(currentPage * itemsPerPage, totalItems) : 0;
 
   return (
-    <div className="flex items-center justify-between px-4 py-3 border-t border-slate-100 dark:border-slate-800 text-xs text-slate-500 dark:text-slate-400">
+    <div className="flex items-center justify-between px-4 py-3 border-t border-slate-100  text-xs text-slate-500 ">
       <div>
         {totalItems ? (
           <span>
-            Hiển thị <strong className="text-slate-900 dark:text-slate-200">{startItem}</strong> đến{' '}
-            <strong className="text-slate-900 dark:text-slate-200">{endItem}</strong> trong tổng số{' '}
-            <strong className="text-slate-900 dark:text-slate-200">{totalItems}</strong> mục
+            Hiển thị <strong className="text-slate-900 ">{startItem}</strong> đến{' '}
+            <strong className="text-slate-900 ">{endItem}</strong> trong tổng số{' '}
+            <strong className="text-slate-900 ">{totalItems}</strong> mục
           </span>
         ) : (
           <span>
@@ -55,7 +55,7 @@ export const Pagination: React.FC<PaginationProps> = ({
               className={`w-7 h-7 rounded-lg font-semibold text-xs transition-colors ${
                 p === currentPage
                   ? 'bg-[#F97316] text-white shadow-sm'
-                  : 'text-slate-600 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-800'
+                  : 'text-slate-600 hover:bg-slate-100  '
               }`}
             >
               {p}

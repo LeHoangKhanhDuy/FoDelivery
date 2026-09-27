@@ -100,7 +100,7 @@ export const ProductFilters = ({
           value={searchQuery}
           onChange={(event) => onSearchChange(event.target.value)}
           placeholder="Tìm món ăn theo tên, mô tả..."
-          className="h-10 w-full rounded-lg border border-slate-200 bg-white py-2 pl-10 pr-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-orange-400 focus:ring-2 focus:ring-orange-500/15 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-100"
+          className="h-10 w-full rounded-lg border border-slate-200 bg-white py-2 pl-10 pr-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-orange-400 focus:ring-2 focus:ring-orange-500/15   "
         />
       </label>
 

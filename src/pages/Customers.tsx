@@ -38,7 +38,7 @@ export const Customers: React.FC = () => {
         <div className="flex items-center gap-3">
           <Avatar src={item.avatar} name={item.name} size="md" />
           <div>
-            <div className="font-bold text-xs text-slate-900 dark:text-slate-100">{item.name}</div>
+            <div className="font-bold text-xs text-slate-900 ">{item.name}</div>
             <div className="text-[11px] text-slate-400">{item.phone}</div>
           </div>
         </div>
@@ -66,14 +66,14 @@ export const Customers: React.FC = () => {
     {
       header: 'Địa chỉ chính',
       cell: (item) => (
-        <div className="max-w-xs truncate text-xs text-slate-600 dark:text-slate-300">
+        <div className="max-w-xs truncate text-xs text-slate-600 ">
           {item.addresses[0]?.address || 'Chưa cập nhật'}
         </div>
       ),
     },
     {
       header: 'Tổng đơn hàng',
-      cell: (item) => <span className="font-bold text-xs text-slate-900 dark:text-slate-100">{item.totalOrders} đơn</span>,
+      cell: (item) => <span className="font-bold text-xs text-slate-900 ">{item.totalOrders} đơn</span>,
     },
     {
       header: 'Tổng chi tiêu',
@@ -107,7 +107,7 @@ export const Customers: React.FC = () => {
         subtitle="Quản lý thông tin khách hàng quen, sổ địa chỉ nhận hàng và lịch sử mua sắm."
       />
 
-      <div className="p-4 bg-white dark:bg-slate-900 border border-slate-200/80 dark:border-slate-800 rounded-2xl soft-shadow">
+      <div className="p-4 bg-white  border border-slate-200/80  rounded-2xl soft-shadow">
         <div className="max-w-md">
           <SearchBox
             value={searchQuery}
@@ -129,11 +129,11 @@ export const Customers: React.FC = () => {
       >
         {selectedCustomer && (
           <div className="space-y-6">
-            <div className="p-4 bg-orange-50 dark:bg-orange-950/40 rounded-2xl border border-orange-200 dark:border-orange-900 flex items-center justify-between">
+            <div className="p-4 bg-orange-50  rounded-2xl border border-orange-200  flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <Avatar src={selectedCustomer.avatar} name={selectedCustomer.name} size="lg" />
                 <div>
-                  <h3 className="font-bold text-sm text-slate-900 dark:text-slate-100">{selectedCustomer.name}</h3>
+                  <h3 className="font-bold text-sm text-slate-900 ">{selectedCustomer.name}</h3>
                   <p className="text-xs text-slate-500">{selectedCustomer.phone}</p>
                 </div>
               </div>
@@ -146,13 +146,13 @@ export const Customers: React.FC = () => {
               {selectedCustomer.addresses.map((addr) => (
                 <div
                   key={addr.id}
-                  className="p-3 bg-slate-50 dark:bg-slate-800/50 rounded-xl text-xs space-y-1 border border-slate-100 dark:border-slate-800"
+                  className="p-3 bg-slate-50  rounded-xl text-xs space-y-1 border border-slate-100 "
                 >
-                  <div className="flex items-center justify-between font-bold text-slate-900 dark:text-slate-100">
+                  <div className="flex items-center justify-between font-bold text-slate-900 ">
                     <span>{addr.label}</span>
                     {addr.isDefault && <Badge variant="success" size="sm">Mặc định</Badge>}
                   </div>
-                  <p className="text-slate-600 dark:text-slate-300">{addr.address}</p>
+                  <p className="text-slate-600 ">{addr.address}</p>
                 </div>
               ))}
             </div>
@@ -167,10 +167,10 @@ export const Customers: React.FC = () => {
                   customerOrders.map((ord) => (
                     <div
                       key={ord.id}
-                      className="p-3 bg-slate-50 dark:bg-slate-800/40 rounded-xl flex items-center justify-between text-xs border border-slate-100 dark:border-slate-800"
+                      className="p-3 bg-slate-50  rounded-xl flex items-center justify-between text-xs border border-slate-100 "
                     >
                       <div>
-                        <div className="font-bold text-slate-900 dark:text-slate-100">{ord.code}</div>
+                        <div className="font-bold text-slate-900 ">{ord.code}</div>
                         <div className="text-[10px] text-slate-400">{ord.createdAt}</div>
                       </div>
                       <div className="text-right">

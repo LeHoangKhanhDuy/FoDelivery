@@ -65,7 +65,7 @@ export const Reports: React.FC = () => {
           growthPercent={-4.1}
           growthLabel="nhanh hơn tuần trước"
           icon={<Clock className="w-5 h-5" />}
-          iconBgColor="bg-emerald-50 text-emerald-600 dark:bg-emerald-950/50 dark:text-emerald-400"
+          iconBgColor="bg-emerald-50 text-emerald-600  "
         />
       </div>
 
@@ -73,7 +73,7 @@ export const Reports: React.FC = () => {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Weekly Revenue Bar Chart */}
         <Card className="lg:col-span-2 space-y-4">
-          <h3 className="text-base font-bold text-slate-900 dark:text-slate-100">
+          <h3 className="text-base font-bold text-slate-900 ">
             Hiệu suất Doanh thu theo Tuần (VNĐ)
           </h3>
           <div className="h-72 w-full pt-2">
@@ -96,7 +96,7 @@ export const Reports: React.FC = () => {
 
         {/* Omnichannel Share Pie Chart */}
         <Card className="space-y-4">
-          <h3 className="text-base font-bold text-slate-900 dark:text-slate-100">
+          <h3 className="text-base font-bold text-slate-900 ">
             Tỷ trọng Đơn hàng theo Kênh
           </h3>
           <div className="h-56 w-full">
@@ -111,14 +111,14 @@ export const Reports: React.FC = () => {
               </PieChart>
             </ResponsiveContainer>
           </div>
-          <div className="space-y-1.5 text-xs border-t border-slate-100 dark:border-slate-800 pt-3">
+          <div className="space-y-1.5 text-xs border-t border-slate-100  pt-3">
             {CHANNEL_DATA.map((c) => (
               <div key={c.name} className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: c.color }} />
-                  <span className="text-slate-700 dark:text-slate-300 font-medium">{c.name}</span>
+                  <span className="text-slate-700  font-medium">{c.name}</span>
                 </div>
-                <span className="font-bold text-slate-900 dark:text-slate-100">{c.value}%</span>
+                <span className="font-bold text-slate-900 ">{c.value}%</span>
               </div>
             ))}
           </div>

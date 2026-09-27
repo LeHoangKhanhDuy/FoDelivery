@@ -35,17 +35,17 @@ export const Branches: React.FC = () => {
                 onClick={() => setSelectedBranchId(b.id)}
                 className={`transition-all ${
                   isSelected
-                    ? 'border-[#F97316] ring-2 ring-orange-500/20 bg-orange-50/20 dark:bg-orange-950/20'
+                    ? 'border-[#F97316] ring-2 ring-orange-500/20 bg-orange-50/20 '
                     : ''
                 }`}
               >
                 <div className="flex items-start justify-between">
                   <div className="flex items-center gap-3">
-                    <div className="p-3 rounded-2xl bg-orange-100 dark:bg-orange-950 text-[#F97316] font-bold">
+                    <div className="p-3 rounded-2xl bg-orange-100  text-[#F97316] font-bold">
                       <Store className="w-5 h-5" />
                     </div>
                     <div>
-                      <h4 className="text-sm font-bold text-slate-900 dark:text-slate-100">{b.name}</h4>
+                      <h4 className="text-sm font-bold text-slate-900 ">{b.name}</h4>
                       <p className="text-xs text-slate-500">{b.district}, {b.city}</p>
                     </div>
                   </div>
@@ -54,8 +54,8 @@ export const Branches: React.FC = () => {
                   </Badge>
                 </div>
 
-                <div className="mt-4 pt-3 border-t border-slate-100 dark:border-slate-800 space-y-2 text-xs">
-                  <div className="flex items-center gap-2 text-slate-600 dark:text-slate-300">
+                <div className="mt-4 pt-3 border-t border-slate-100  space-y-2 text-xs">
+                  <div className="flex items-center gap-2 text-slate-600 ">
                     <MapPin className="w-3.5 h-3.5 text-rose-500 shrink-0" />
                     <span className="truncate">{b.address}</span>
                   </div>
@@ -74,9 +74,9 @@ export const Branches: React.FC = () => {
         {/* Right Column: Selected Branch Map & Delivery Radius Control */}
         <div className="lg:col-span-7 space-y-4">
           <Card className="space-y-4">
-            <div className="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-3">
+            <div className="flex items-center justify-between border-b border-slate-100  pb-3">
               <div>
-                <h3 className="text-sm font-bold text-slate-900 dark:text-slate-100">{selectedBranch.name}</h3>
+                <h3 className="text-sm font-bold text-slate-900 ">{selectedBranch.name}</h3>
                 <p className="text-xs text-slate-500">Quản lý chi nhánh: {selectedBranch.managerName}</p>
               </div>
               <Button
@@ -100,9 +100,9 @@ export const Branches: React.FC = () => {
             />
 
             {/* Delivery Radius Slider */}
-            <div className="p-4 bg-slate-50 dark:bg-slate-800/50 rounded-2xl border border-slate-200/80 dark:border-slate-800 space-y-3">
+            <div className="p-4 bg-slate-50  rounded-2xl border border-slate-200/80  space-y-3">
               <div className="flex items-center justify-between">
-                <label className="text-xs font-bold text-slate-900 dark:text-slate-100 flex items-center gap-1.5">
+                <label className="text-xs font-bold text-slate-900  flex items-center gap-1.5">
                   <Navigation className="w-4 h-4 text-[#F97316]" />
                   Điều chỉnh Bán kính Giao hàng: <strong className="text-[#F97316] text-sm ml-1">{selectedBranch.deliveryRadiusKm} km</strong>
                 </label>
