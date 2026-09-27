@@ -160,7 +160,7 @@ export const AppSidebar: React.FC<AppSidebarProps> = ({
                 ? 'bg-[#F97316] text-white font-semibold'
                 : 'text-slate-300 hover:bg-slate-800/80 hover:text-white'
             )}
-            title={collapsed && !mobileOpen ? 'Thực đơn' : undefined}
+            title={collapsed && !mobileOpen ? 'Quản lý thực đơn' : undefined}
           >
             <UtensilsCrossed className="w-4 h-4 shrink-0" />
             {(!collapsed || mobileOpen) && <span>Quản lý thực đơn</span>}

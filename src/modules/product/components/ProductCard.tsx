@@ -24,7 +24,7 @@ export const ProductCard = ({ product, viewMode, onToggleAvailability, onOpenAct
   const isListView = viewMode === 'list';
 
   return (
-    <Card padded={false} className={clsx('group border border-slate-100/80 shadow-sm shadow-slate-200/40 cursor-pointer', isListView ? 'grid min-h-44 grid-cols-1 sm:grid-cols-[240px_1fr]' : 'flex h-full flex-col')}>
+    <Card padded={false} className={clsx('group relative isolate z-0 border border-slate-100/80 shadow-sm shadow-slate-200/40 cursor-pointer', isListView ? 'grid min-h-44 grid-cols-1 sm:grid-cols-[240px_1fr]' : 'flex h-full flex-col')}>
       <div className={clsx('relative overflow-hidden bg-slate-100 ', isListView ? 'min-h-44' : 'aspect-[4/3]')}>
         <img
           src={product.image}
