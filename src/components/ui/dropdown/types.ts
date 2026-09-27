@@ -1,8 +1,7 @@
 import type { ElementType, ReactNode } from "react";
-import type * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 
-export type DropdownAlign = React.ComponentPropsWithoutRef<typeof DropdownMenu.Content>["align"];
-export type DropdownSide = React.ComponentPropsWithoutRef<typeof DropdownMenu.Content>["side"];
+export type DropdownAlign = "start" | "center" | "end";
+export type DropdownSide = "top" | "right" | "bottom" | "left";
 export type DropdownWidth = number | string;
 export type DropdownIconType = ElementType;
 

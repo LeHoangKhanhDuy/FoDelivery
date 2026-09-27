@@ -17,7 +17,7 @@ interface MenuState {
 export const useMenuStore = create<MenuState>((set) => ({
   products: MOCK_PRODUCTS,
   categories: MOCK_CATEGORIES,
-  selectedCategoryId: 'cat-1',
+  selectedCategoryId: 'all',
   searchQuery: '',
 
   setSelectedCategoryId: (selectedCategoryId) => set({ selectedCategoryId }),

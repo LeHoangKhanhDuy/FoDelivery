@@ -1,14 +1,13 @@
 import type { MouseEventHandler } from "react";
-import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
 import { DropdownIcon } from "@/components/ui/dropdown/DropdownIcon";
 import type {
   DropdownBaseItemProps,
   DropdownDangerProps,
 } from "@/components/ui/dropdown/types";
-import { cn } from "@/lib/utils";
+import { clsx } from "clsx";
 
 interface DropdownItemProps extends DropdownBaseItemProps, DropdownDangerProps {
-  onClick?: MouseEventHandler<HTMLDivElement>;
+  onClick?: MouseEventHandler<HTMLButtonElement>;
   active?: boolean;
 }
 
@@ -24,38 +23,40 @@ export function DropdownItem({
   className,
 }: DropdownItemProps) {
   return (
-    <DropdownMenu.Item
+    <button
+      type="button"
+      role="menuitem"
       disabled={disabled}
       onClick={onClick}
-      className={cn(
-        "group my-0.5 flex min-h-9 cursor-pointer select-none items-center gap-3 rounded-lg px-3 py-2 text-sm outline-none transition-colors",
+      className={clsx(
+        "group my-0.5 flex min-h-9 w-full cursor-pointer select-none items-center gap-3 rounded-lg px-3 py-2 text-left text-sm outline-none transition-colors",
         !active &&
-          "text-foreground hover:bg-slate-100 focus:bg-slate-100 data-[highlighted]:bg-slate-100 dark:hover:bg-slate-700/60 dark:focus:bg-slate-700/60 dark:data-[highlighted]:bg-slate-700/60",
-        "data-[disabled]:pointer-events-none data-[disabled]:cursor-not-allowed data-[disabled]:opacity-50",
+          "text-slate-700 hover:bg-slate-100 focus:bg-slate-100 dark:text-slate-200 dark:hover:bg-slate-700/60 dark:focus:bg-slate-700/60",
+        "disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50",
         danger &&
           !active &&
-          "text-[hsl(var(--danger))] focus:text-[hsl(var(--danger))] data-[highlighted]:text-[hsl(var(--danger))]",
+          "text-red-600 focus:text-red-600 dark:text-red-400",
         active &&
-          "bg-primary/10 text-primary dark:bg-primary/20 dark:text-blue-300 focus:bg-primary/15 data-[highlighted]:bg-primary/15",
+          "bg-orange-50 text-orange-600 focus:bg-orange-100 dark:bg-orange-500/15 dark:text-orange-400",
         className,
       )}
     >
       <DropdownIcon
         icon={icon}
-        className={cn(
+        className={clsx(
           danger
-            ? "text-[hsl(var(--danger))]"
-            : "text-muted-foreground group-data-[highlighted]:text-foreground",
-          active && "text-primary dark:text-blue-300 group-data-[highlighted]:text-primary",
+            ? "text-red-500"
+            : "text-slate-400 group-hover:text-slate-600 dark:group-hover:text-slate-200",
+          active && "text-orange-500",
         )}
       />
       <span className="min-w-0 flex-1">
         <span className="block truncate font-medium">{label}</span>
         {description ? (
           <span
-            className={cn(
-              "mt-0.5 block truncate text-xs text-muted-foreground",
-              active && "text-primary/70 dark:text-blue-300/70",
+            className={clsx(
+              "mt-0.5 block truncate text-xs text-slate-500 dark:text-slate-400",
+              active && "text-orange-500/80",
             )}
           >
             {description}
@@ -64,14 +65,14 @@ export function DropdownItem({
       </span>
       {shortcut ? (
         <span
-          className={cn(
-            "ml-auto shrink-0 text-xs font-medium text-muted-foreground",
-            active && "text-primary/70 dark:text-blue-300/70",
+          className={clsx(
+            "ml-auto shrink-0 text-xs font-medium text-slate-500 dark:text-slate-400",
+            active && "text-orange-500/80",
           )}
         >
           {shortcut}
         </span>
       ) : null}
-    </DropdownMenu.Item>
+    </button>
   );
 }

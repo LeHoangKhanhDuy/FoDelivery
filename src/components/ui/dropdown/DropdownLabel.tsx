@@ -1,6 +1,5 @@
 import type { ReactNode } from "react";
-import * as DropdownMenu from "@radix-ui/react-dropdown-menu";
-import { cn } from "@/lib/utils";
+import { clsx } from "clsx";
 
 interface DropdownLabelProps {
   children: ReactNode;
@@ -9,8 +8,8 @@ interface DropdownLabelProps {
 
 export function DropdownLabel({ children, className }: DropdownLabelProps) {
   return (
-    <DropdownMenu.Label className={cn("px-3 py-2 text-xs font-bold uppercase tracking-wide text-muted-foreground", className)}>
+    <div className={clsx("px-3 py-2 text-xs font-bold uppercase tracking-wide text-slate-500 dark:text-slate-400", className)}>
       {children}
-    </DropdownMenu.Label>
+    </div>
   );
 }
