@@ -1,7 +1,7 @@
-import { PackagePlus } from 'lucide-react';
+import { PackagePlus, Save } from 'lucide-react';
 import { Button } from '@/components/ui/Button';
 import { Modal } from '@/components/ui/Modal';
-import type { Category } from '@/types';
+import type { Category, Product } from '@/types';
 import { ProductDescriptionField } from '@/modules/product/components/ProductDescriptionField';
 import { ProductGeneralFields } from "@/modules/product/components/ProductGeneralFields";
 import { ProductMediaStatusFields } from "@/modules/product/components/ProductMediaStatusFields";
@@ -12,6 +12,7 @@ import type { CreateProductFormValues } from '@/modules/product/types/index';
 interface AddProductModalProps {
   isOpen: boolean;
   categories: Category[];
+  product?: Product | null;
   onClose: () => void;
   onSubmit: (values: CreateProductFormValues) => void;
 }
@@ -19,9 +20,11 @@ interface AddProductModalProps {
 export const AddProductModal = ({
   isOpen,
   categories,
+  product,
   onClose,
   onSubmit,
 }: AddProductModalProps) => {
+  const isEditMode = Boolean(product);
   const {
     form,
     imageFileName,
@@ -31,7 +34,7 @@ export const AddProductModal = ({
     removeImage,
     resetForm,
     validateImage,
-  } = useAddProductForm(isOpen);
+  } = useAddProductForm(isOpen, product);
   const {
     control,
     register,
@@ -54,8 +57,8 @@ export const AddProductModal = ({
     <Modal
       isOpen={isOpen}
       onClose={handleClose}
-      title="Thêm thực đơn mới"
-      description="Tạo món mới và đưa vào danh sách bán hàng"
+      title={isEditMode ? 'Chi tiết sản phẩm' : 'Thêm thực đơn mới'}
+      description={isEditMode ? 'Xem và cập nhật thông tin sản phẩm' : 'Tạo món mới và đưa vào danh sách bán hàng'}
       maxWidth="2xl"
       backdropBlur={false}
     >
@@ -89,9 +92,9 @@ export const AddProductModal = ({
           <Button
             type="submit"
             isLoading={isSubmitting}
-            leftIcon={<PackagePlus className="h-4 w-4" />}
+            leftIcon={isEditMode ? <Save className="h-4 w-4" /> : <PackagePlus className="h-4 w-4" />}
           >
-            Thêm thực đơn
+            {isEditMode ? 'Lưu thay đổi' : 'Thêm thực đơn'}
           </Button>
         </div>
       </form>

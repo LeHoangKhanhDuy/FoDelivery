@@ -8,11 +8,10 @@ interface MenuState {
   categories: Category[];
   selectedCategoryId: string;
   searchQuery: string;
-
-  // Actions
   setSelectedCategoryId: (id: string) => void;
   setSearchQuery: (query: string) => void;
   addProduct: (product: Product) => void;
+  updateProduct: (product: Product) => void;
   toggleProductStock: (id: string) => void;
 }
 
@@ -25,6 +24,9 @@ export const useMenuStore = create<MenuState>((set) => ({
   setSelectedCategoryId: (selectedCategoryId) => set({ selectedCategoryId }),
   setSearchQuery: (searchQuery) => set({ searchQuery }),
   addProduct: (product) => set((state) => ({ products: [product, ...state.products] })),
+  updateProduct: (product) => set((state) => ({
+    products: state.products.map((item) => (item.id === product.id ? product : item)),
+  })),
 
   toggleProductStock: (id) => {
     set((state) => ({

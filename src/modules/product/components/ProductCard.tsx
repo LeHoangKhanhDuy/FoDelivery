@@ -1,4 +1,4 @@
-import { EllipsisVertical, Star } from 'lucide-react';
+import { Star } from 'lucide-react';
 import { clsx } from 'clsx';
 import { Card } from '@/components/ui/Card';
 import { Switch } from '@/components/ui/Switch';
@@ -10,7 +10,7 @@ interface ProductCardProps {
   product: Product;
   viewMode: ProductViewMode;
   onToggleAvailability: (product: Product) => void;
-  onOpenActions: (product: Product) => void;
+  onSelectProduct: (product: Product) => void;
 }
 
 const ProductAvailabilityBadge = ({ isAvailable }: Pick<Product, 'isAvailable'>) => (
@@ -20,11 +20,28 @@ const ProductAvailabilityBadge = ({ isAvailable }: Pick<Product, 'isAvailable'>)
   </span>
 );
 
-export const ProductCard = ({ product, viewMode, onToggleAvailability, onOpenActions }: ProductCardProps) => {
+export const ProductCard = ({ product, viewMode, onToggleAvailability, onSelectProduct }: ProductCardProps) => {
   const isListView = viewMode === 'list';
 
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
+    if (event.key !== 'Enter' && event.key !== ' ') return;
+    event.preventDefault();
+    onSelectProduct(product);
+  };
+
   return (
-    <Card padded={false} className={clsx('group relative isolate z-0 border border-slate-100/80 shadow-sm shadow-slate-200/40 cursor-pointer', isListView ? 'grid min-h-44 grid-cols-1 sm:grid-cols-[240px_1fr]' : 'flex h-full flex-col')}>
+    <Card
+      padded={false}
+      role="button"
+      tabIndex={0}
+      aria-label={`Xem và chỉnh sửa ${product.name}`}
+      onClick={() => onSelectProduct(product)}
+      onKeyDown={handleKeyDown}
+      className={clsx(
+        'group relative isolate z-0 cursor-pointer border border-slate-100/80 shadow-sm shadow-slate-200/40 focus:outline-none focus:ring-2 focus:ring-orange-500/30',
+        isListView ? 'grid min-h-44 grid-cols-1 sm:grid-cols-[240px_1fr]' : 'flex h-full flex-col',
+      )}
+    >
       <div className={clsx('relative overflow-hidden bg-slate-100 ', isListView ? 'min-h-44' : 'aspect-[4/3]')}>
         <img
           src={product.image}
@@ -36,9 +53,6 @@ export const ProductCard = ({ product, viewMode, onToggleAvailability, onOpenAct
           className="relative z-10 h-full w-full bg-slate-50 object-contain p-2 transition-transform duration-300 group-hover:scale-[1.02]"
         />
         <div className="absolute left-3 top-3 z-20"><ProductAvailabilityBadge isAvailable={product.isAvailable} /></div>
-        <button type="button" aria-label={`Mở thao tác cho ${product.name}`} onClick={() => onOpenActions(product)} className="absolute right-3 top-3 z-20 flex h-8 w-8 items-center justify-center rounded-lg bg-white/95 text-slate-700 shadow-md transition hover:bg-white hover:text-orange-600 cursor-pointer">
-          <EllipsisVertical className="h-4 w-4" aria-hidden="true" />
-        </button>
       </div>
 
       <div className="flex min-w-0 flex-1 flex-col p-4">
@@ -55,7 +69,12 @@ export const ProductCard = ({ product, viewMode, onToggleAvailability, onOpenAct
               <span>({product.orderCount.toLocaleString('vi-VN')} đã bán)</span>
             </p>
           </div>
-          <Switch checked={product.isAvailable} onChange={() => onToggleAvailability(product)} />
+          <div
+            onClick={(event) => event.stopPropagation()}
+            onKeyDown={(event) => event.stopPropagation()}
+          >
+            <Switch checked={product.isAvailable} onChange={() => onToggleAvailability(product)} />
+          </div>
         </div>
       </div>
     </Card>

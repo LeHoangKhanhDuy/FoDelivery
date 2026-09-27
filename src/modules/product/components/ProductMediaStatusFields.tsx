@@ -81,7 +81,7 @@ export const ProductMediaStatusFields = ({
             aria-label="Xóa ảnh đã tải lên"
             title="Xóa ảnh"
             onClick={onRemoveImage}
-            className="absolute right-2 top-2 flex h-7 w-7 items-center justify-center rounded-lg bg-white text-slate-400 shadow-sm ring-1 ring-slate-200 transition hover:bg-red-50 hover:text-red-500"
+            className="absolute right-2 top-2 flex h-7 w-7 items-center justify-center rounded-lg bg-white text-slate-400 shadow-sm transition hover:bg-red-50 hover:text-red-500 cursor-pointer"
           >
             <Trash2 className="h-3.5 w-3.5" aria-hidden="true" />
           </button>
