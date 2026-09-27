@@ -163,7 +163,7 @@ export const AppSidebar: React.FC<AppSidebarProps> = ({
             title={collapsed && !mobileOpen ? 'Thực đơn' : undefined}
           >
             <UtensilsCrossed className="w-4 h-4 shrink-0" />
-            {(!collapsed || mobileOpen) && <span>Thực đơn</span>}
+            {(!collapsed || mobileOpen) && <span>Quản lý thực đơn</span>}
           </NavLink>
 
           {/* 4. Khách hàng */}
