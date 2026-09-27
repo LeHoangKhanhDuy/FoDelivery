@@ -64,9 +64,9 @@ export const Modal: React.FC<ModalProps> = ({
             transition={{ duration: 0.15, ease: 'easeOut' }}
             className={`relative w-full ${maxWidthClasses[maxWidth]} bg-white  border border-slate-200  rounded-2xl shadow-2xl p-6 z-10 overflow-hidden`}
           >
-            <div className="flex items-center justify-between pb-4 border-b border-slate-100 ">
+            <div className="flex items-center justify-between pb-2">
               <div>
-                {title && <h3 className="text-lg font-bold text-slate-900 ">{title}</h3>}
+                {title && <h3 className="text-lg font-bold text-slate-900 uppercase">{title}</h3>}
                 {description && (
                   <p className="text-xs text-slate-500  mt-0.5">{description}</p>
                 )}

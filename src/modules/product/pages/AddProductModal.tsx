@@ -27,6 +27,8 @@ export const AddProductModal = ({
     imageFileName,
     imagePreview,
     handleImageChange,
+    handleImageFile,
+    removeImage,
     resetForm,
     validateImage,
   } = useAddProductForm(isOpen);
@@ -52,8 +54,8 @@ export const AddProductModal = ({
     <Modal
       isOpen={isOpen}
       onClose={handleClose}
-      title="Thêm thực đơn"
-      description="Tạo món mới và đưa vào danh sách bán hàng."
+      title="Thêm thực đơn mới"
+      description="Tạo món mới và đưa vào danh sách bán hàng"
       maxWidth="2xl"
       backdropBlur={false}
     >
@@ -68,17 +70,19 @@ export const AddProductModal = ({
           errors={errors}
           register={register}
         />
-        <ProductPricingFields errors={errors} getValues={getValues} register={register} />
+        <ProductPricingFields control={control} errors={errors} getValues={getValues} />
         <ProductMediaStatusFields
           control={control}
           errors={errors}
           imageFileName={imageFileName}
           imagePreview={imagePreview}
           onImageChange={handleImageChange}
+          onImageSelect={handleImageFile}
+          onRemoveImage={removeImage}
         />
         <ProductDescriptionField errors={errors} register={register} />
 
-        <div className="flex justify-end gap-3 border-t border-slate-100 pt-4">
+        <div className="flex justify-end gap-3 pt-2">
           <Button type="button" variant="outline" onClick={handleClose}>
             Hủy
           </Button>

@@ -30,7 +30,7 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
             id={inputId}
             ref={ref}
             className={clsx(
-              'w-full px-3.5 py-2 text-sm bg-white  border rounded-xl transition-colors duration-150 focus:outline-none focus:ring-2 text-slate-900  placeholder-slate-400',
+              'w-full px-3.5 py-2 text-sm bg-white  border rounded-lg transition-colors duration-150 focus:outline-none focus:ring-2 text-slate-900  placeholder-slate-400',
               leftIcon && 'pl-10',
               rightIcon && 'pr-10',
               error

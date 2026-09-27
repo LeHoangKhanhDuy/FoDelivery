@@ -37,7 +37,7 @@ export const ProductFormDropdown = <TValue extends string>({
             aria-label={ariaLabel}
             aria-invalid={Boolean(error)}
             className={clsx(
-              'flex h-10 w-full items-center justify-between gap-3 rounded-xl border bg-white px-3.5 text-left text-sm outline-none transition focus:ring-2',
+              'flex h-10 w-full items-center justify-between gap-3 rounded-lg border bg-white px-3.5 text-left text-sm outline-none transition focus:ring-2 cursor-pointer',
               error
                 ? 'border-red-400 focus:border-red-500 focus:ring-red-200'
                 : 'border-slate-200 focus:border-[#F97316] focus:ring-orange-500/20',

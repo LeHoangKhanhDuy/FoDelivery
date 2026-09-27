@@ -36,10 +36,7 @@ export const useAddProductForm = (isOpen: boolean) => {
     if (isOpen) resetForm();
   }, [isOpen, resetForm]);
 
-  const handleImageChange = async (event: ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (!file) return;
-
+  const handleImageFile = useCallback(async (file: File) => {
     if (!['image/png', 'image/jpeg', 'image/webp'].includes(file.type)) {
       form.setError('image', { message: 'Chỉ hỗ trợ ảnh PNG, JPG hoặc WebP' });
       return;
@@ -57,6 +54,18 @@ export const useAddProductForm = (isOpen: boolean) => {
     } catch {
       form.setError('image', { message: 'Không thể đọc hình ảnh đã chọn' });
     }
+  }, [form]);
+
+  const handleImageChange = async (event: ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) await handleImageFile(file);
+    event.target.value = '';
+  };
+
+  const removeImage = () => {
+    form.setValue('image', '', { shouldDirty: true });
+    form.clearErrors('image');
+    setImageFileName('');
   };
 
   const validateImage = () => {
@@ -70,6 +79,8 @@ export const useAddProductForm = (isOpen: boolean) => {
     imageFileName,
     imagePreview: form.watch('image'),
     handleImageChange,
+    handleImageFile,
+    removeImage,
     resetForm,
     validateImage,
   };
