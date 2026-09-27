@@ -12,6 +12,7 @@ export const useProductCatalog = () => {
     setSelectedCategoryId,
     setSearchQuery,
     addProduct,
+    updateProduct,
     toggleProductStock,
   } = useMenuStore();
   const [availability, setAvailability] = useState<ProductAvailabilityFilter>('all');
@@ -51,6 +52,7 @@ export const useProductCatalog = () => {
     setSortBy,
     setViewMode,
     addProduct,
+    updateProduct,
     toggleProductStock,
     resetFilters,
   };

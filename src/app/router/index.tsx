@@ -29,6 +29,9 @@ const Branches = lazy(() =>
 const Menu = lazy(() =>
   import('@/pages/Menu').then((module) => ({ default: module.Menu }))
 );
+const Categories = lazy(() =>
+  import('@/pages/Categories').then((module) => ({ default: module.Categories }))
+);
 const ShippingRulePage = lazy(() =>
   import('@/pages/ShippingRule').then((module) => ({ default: module.ShippingRulePage }))
 );
@@ -67,6 +70,7 @@ export const router = createBrowserRouter([
           { path: 'drivers', element: renderLazyPage(Drivers) },
           { path: 'branches', element: renderLazyPage(Branches) },
           { path: 'menu', element: renderLazyPage(Menu) },
+          { path: 'categories', element: renderLazyPage(Categories) },
           { path: 'shipping', element: renderLazyPage(ShippingRulePage) },
           { path: 'reports', element: renderLazyPage(Reports) },
           { path: 'settings', element: renderLazyPage(SettingsPage) },

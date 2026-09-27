@@ -37,6 +37,10 @@ const PRIVATE_ROUTE_SEO: Record<string, Omit<RouteSeoConfig, 'robots'>> = {
     title: 'Quản lý thực đơn | FoDelivery',
     description: 'Quản lý món ăn, danh mục, giá bán và trạng thái còn hàng.',
   },
+  '/categories': {
+    title: 'Quản lý danh mục sản phẩm | FoDelivery',
+    description: 'Quản lý thứ tự, trạng thái hiển thị và sản phẩm thuộc từng danh mục.',
+  },
   '/shipping': {
     title: 'Cấu hình phí giao hàng | FoDelivery',
     description: 'Thiết lập và mô phỏng quy tắc tính phí giao hàng linh hoạt.',

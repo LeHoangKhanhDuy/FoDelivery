@@ -5,6 +5,7 @@ import {
   LayoutDashboard,
   ShoppingBag,
   UtensilsCrossed,
+  FolderTree,
   Users,
   Bike,
   BarChart3,
@@ -166,7 +167,23 @@ export const AppSidebar: React.FC<AppSidebarProps> = ({
             {(!collapsed || mobileOpen) && <span>Quản lý thực đơn</span>}
           </NavLink>
 
-          {/* 4. Khách hàng */}
+          {/* 4. Danh mục */}
+          <NavLink
+            to="/categories"
+            onClick={onMobileClose}
+            className={clsx(
+              'flex items-center gap-3 px-3.5 py-2.5 rounded-xl font-medium text-xs transition-colors',
+              location.pathname.startsWith('/categories')
+                ? 'bg-[#F97316] text-white font-semibold'
+                : 'text-slate-300 hover:bg-slate-800/80 hover:text-white'
+            )}
+            title={collapsed && !mobileOpen ? 'Quản lý danh mục' : undefined}
+          >
+            <FolderTree className="w-4 h-4 shrink-0" />
+            {(!collapsed || mobileOpen) && <span>Quản lý danh mục</span>}
+          </NavLink>
+
+          {/* 5. Khách hàng */}
           <NavLink
             to="/customers"
             onClick={onMobileClose}
@@ -182,7 +199,7 @@ export const AppSidebar: React.FC<AppSidebarProps> = ({
             {(!collapsed || mobileOpen) && <span>Khách hàng</span>}
           </NavLink>
 
-          {/* 5. Tài xế giao hàng */}
+          {/* 6. Tài xế giao hàng */}
           <NavLink
             to="/drivers"
             onClick={onMobileClose}
@@ -198,7 +215,7 @@ export const AppSidebar: React.FC<AppSidebarProps> = ({
             {(!collapsed || mobileOpen) && <span>Tài xế giao hàng</span>}
           </NavLink>
 
-          {/* 6. Báo cáo */}
+          {/* 7. Báo cáo */}
           <NavLink
             to="/reports"
             onClick={onMobileClose}
@@ -214,7 +231,7 @@ export const AppSidebar: React.FC<AppSidebarProps> = ({
             {(!collapsed || mobileOpen) && <span>Báo cáo</span>}
           </NavLink>
 
-          {/* 7. Cài đặt */}
+          {/* 8. Cài đặt */}
           <NavLink
             to="/settings"
             onClick={onMobileClose}

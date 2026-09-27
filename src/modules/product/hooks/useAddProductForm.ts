@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState, type ChangeEvent } from 'react';
 import { useForm } from 'react-hook-form';
+import type { Product } from '@/types';
 import type { CreateProductFormValues } from '@/modules/product/types/index';
 
 const MAX_IMAGE_SIZE = 5 * 1024 * 1024;
@@ -14,6 +15,20 @@ const DEFAULT_VALUES: CreateProductFormValues = {
   status: 'active',
 };
 
+const getFormValues = (product?: Product | null): CreateProductFormValues => {
+  if (!product) return DEFAULT_VALUES;
+
+  return {
+    name: product.name,
+    categoryId: product.categoryId,
+    price: product.price,
+    originalPrice: product.originalPrice,
+    image: product.image,
+    description: product.description,
+    status: product.isAvailable ? 'active' : 'inactive',
+  };
+};
+
 const readImageAsDataUrl = (file: File) =>
   new Promise<string>((resolve, reject) => {
     const reader = new FileReader();
@@ -22,15 +37,15 @@ const readImageAsDataUrl = (file: File) =>
     reader.readAsDataURL(file);
   });
 
-export const useAddProductForm = (isOpen: boolean) => {
+export const useAddProductForm = (isOpen: boolean, product?: Product | null) => {
   const [imageFileName, setImageFileName] = useState('');
   const form = useForm<CreateProductFormValues>({ defaultValues: DEFAULT_VALUES, mode: 'onTouched' });
   const { reset } = form;
 
   const resetForm = useCallback(() => {
-    reset(DEFAULT_VALUES);
-    setImageFileName('');
-  }, [reset]);
+    reset(getFormValues(product));
+    setImageFileName(product?.image ? 'Ảnh sản phẩm hiện tại' : '');
+  }, [product, reset]);
 
   useEffect(() => {
     if (isOpen) resetForm();

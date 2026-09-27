@@ -9,10 +9,15 @@ import type { CreateProductFormValues } from "@/modules/product/types/index";
 
 export const ProductManagementPage = () => {
   const catalog = useProductCatalog();
-  const [isAddProductOpen, setIsAddProductOpen] = useState(false);
+  const [isProductModalOpen, setIsProductModalOpen] = useState(false);
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
 
   const handleToggleAvailability = (product: Product) => {
-    catalog.toggleProductStock(product.id);
+    const wasUpdated = catalog.toggleProductStock(product.id);
+    if (!wasUpdated) {
+      toast.error(`Không thể mở bán “${product.name}” vì danh mục đang bị ẩn`);
+      return;
+    }
     toast.success(
       product.isAvailable
         ? `Đã chuyển “${product.name}” sang hết hàng`
@@ -20,7 +25,7 @@ export const ProductManagementPage = () => {
     );
   };
 
-  const handleCreateProduct = (values: CreateProductFormValues) => {
+  const handleSaveProduct = (values: CreateProductFormValues) => {
     const category = catalog.categories.find((item) => item.id === values.categoryId);
     if (!category) {
       toast.error('Không tìm thấy danh mục đã chọn');
@@ -28,7 +33,24 @@ export const ProductManagementPage = () => {
     }
 
     const { status, ...productValues } = values;
-    catalog.addProduct({
+    if (selectedProduct) {
+      const wasUpdated = catalog.updateProduct({
+        ...selectedProduct,
+        ...productValues,
+        categoryName: category.name,
+        isAvailable: status === 'active',
+      });
+      if (!wasUpdated) {
+        toast.error(`Không thể mở bán sản phẩm vì danh mục “${category.name}” đang bị ẩn`);
+        return;
+      }
+      setIsProductModalOpen(false);
+      setSelectedProduct(null);
+      toast.success(`Đã cập nhật “${values.name}”`);
+      return;
+    }
+
+    const wasAdded = catalog.addProduct({
       ...productValues,
       id: `product-${crypto.randomUUID()}`,
       categoryName: category.name,
@@ -36,8 +58,27 @@ export const ProductManagementPage = () => {
       rating: 5,
       orderCount: 0,
     });
-    setIsAddProductOpen(false);
+    if (!wasAdded) {
+      toast.error(`Không thể mở bán sản phẩm vì danh mục “${category.name}” đang bị ẩn`);
+      return;
+    }
+    setIsProductModalOpen(false);
     toast.success(`Đã thêm “${values.name}” vào thực đơn`);
+  };
+
+  const handleCreateProduct = () => {
+    setSelectedProduct(null);
+    setIsProductModalOpen(true);
+  };
+
+  const handleSelectProduct = (product: Product) => {
+    setSelectedProduct(product);
+    setIsProductModalOpen(true);
+  };
+
+  const handleCloseProductModal = () => {
+    setIsProductModalOpen(false);
+    setSelectedProduct(null);
   };
 
   return (
@@ -54,20 +95,21 @@ export const ProductManagementPage = () => {
         onAvailabilityChange={catalog.setAvailability}
         onSortChange={catalog.setSortBy}
         onViewModeChange={catalog.setViewMode}
-        onCreateProduct={() => setIsAddProductOpen(true)}
+        onCreateProduct={handleCreateProduct}
       />
       <ProductCatalog
         products={catalog.visibleProducts}
         viewMode={catalog.viewMode}
         onToggleAvailability={handleToggleAvailability}
-        onOpenActions={(product) => toast(`Mở thao tác cho ${product.name}`)}
+        onSelectProduct={handleSelectProduct}
         onResetFilters={catalog.resetFilters}
       />
       <AddProductModal
-        isOpen={isAddProductOpen}
+        isOpen={isProductModalOpen}
         categories={catalog.categories}
-        onClose={() => setIsAddProductOpen(false)}
-        onSubmit={handleCreateProduct}
+        product={selectedProduct}
+        onClose={handleCloseProductModal}
+        onSubmit={handleSaveProduct}
       />
     </div>
   );
