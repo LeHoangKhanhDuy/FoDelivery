@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 import { useMenuStore } from '@/stores/useMenuStore';
-import type { ProductAvailabilityFilter, ProductSortOption, ProductViewMode } from '../types';
-import { filterProducts } from '../utils/filterProducts';
+import type { ProductAvailabilityFilter, ProductSortOption, ProductViewMode } from '@/modules/product/types/index';
+import { filterProducts } from '@/modules/product/utils/filterProducts';
 
 export const useProductCatalog = () => {
   const {
@@ -11,6 +11,7 @@ export const useProductCatalog = () => {
     searchQuery,
     setSelectedCategoryId,
     setSearchQuery,
+    addProduct,
     toggleProductStock,
   } = useMenuStore();
   const [availability, setAvailability] = useState<ProductAvailabilityFilter>('all');
@@ -49,6 +50,7 @@ export const useProductCatalog = () => {
     setAvailability,
     setSortBy,
     setViewMode,
+    addProduct,
     toggleProductStock,
     resetFilters,
   };

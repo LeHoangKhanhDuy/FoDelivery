@@ -9,6 +9,7 @@ export interface ModalProps {
   description?: string;
   children: React.ReactNode;
   maxWidth?: 'sm' | 'md' | 'lg' | 'xl' | '2xl' | '3xl' | '4xl';
+  backdropBlur?: boolean;
 }
 
 export const Modal: React.FC<ModalProps> = ({
@@ -18,6 +19,7 @@ export const Modal: React.FC<ModalProps> = ({
   description,
   children,
   maxWidth = 'md',
+  backdropBlur = true,
 }) => {
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -52,7 +54,7 @@ export const Modal: React.FC<ModalProps> = ({
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
-            className="fixed inset-0 bg-slate-900/40 backdrop-blur-sm"
+            className={`fixed inset-0 bg-slate-900/40 ${backdropBlur ? 'backdrop-blur-sm' : ''}`}
           />
 
           <motion.div

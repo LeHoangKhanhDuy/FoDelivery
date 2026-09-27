@@ -1,11 +1,15 @@
-import toast from "react-hot-toast";
-import type { Product } from "@/types";
-import { ProductCatalog } from "../components/ProductCatalog";
-import { ProductFilters } from "../components/ProductFilters";
-import { useProductCatalog } from "../hooks/useProductCatalog";
+import { useState } from 'react';
+import toast from 'react-hot-toast';
+import type { Product } from '@/types';
+import { AddProductModal } from '@/modules/product/pages/AddProductModal';
+import { ProductCatalog } from "@/modules/product/components/ProductCatalog";
+import { ProductFilters } from "@/modules/product/components/ProductFilters";
+import { useProductCatalog } from "@/modules/product/hooks/useProductCatalog";
+import type { CreateProductFormValues } from "@/modules/product/types/index";
 
 export const ProductManagementPage = () => {
   const catalog = useProductCatalog();
+  const [isAddProductOpen, setIsAddProductOpen] = useState(false);
 
   const handleToggleAvailability = (product: Product) => {
     catalog.toggleProductStock(product.id);
@@ -14,6 +18,26 @@ export const ProductManagementPage = () => {
         ? `Đã chuyển “${product.name}” sang hết hàng`
         : `Đã mở bán lại “${product.name}”`,
     );
+  };
+
+  const handleCreateProduct = (values: CreateProductFormValues) => {
+    const category = catalog.categories.find((item) => item.id === values.categoryId);
+    if (!category) {
+      toast.error('Không tìm thấy danh mục đã chọn');
+      return;
+    }
+
+    const { status, ...productValues } = values;
+    catalog.addProduct({
+      ...productValues,
+      id: `product-${crypto.randomUUID()}`,
+      categoryName: category.name,
+      isAvailable: status === 'active',
+      rating: 5,
+      orderCount: 0,
+    });
+    setIsAddProductOpen(false);
+    toast.success(`Đã thêm “${values.name}” vào thực đơn`);
   };
 
   return (
@@ -30,9 +54,7 @@ export const ProductManagementPage = () => {
         onAvailabilityChange={catalog.setAvailability}
         onSortChange={catalog.setSortBy}
         onViewModeChange={catalog.setViewMode}
-        onCreateProduct={() =>
-          toast.success("Đã sẵn sàng mở biểu mẫu thêm thực đơn")
-        }
+        onCreateProduct={() => setIsAddProductOpen(true)}
       />
       <ProductCatalog
         products={catalog.visibleProducts}
@@ -40,6 +62,12 @@ export const ProductManagementPage = () => {
         onToggleAvailability={handleToggleAvailability}
         onOpenActions={(product) => toast(`Mở thao tác cho ${product.name}`)}
         onResetFilters={catalog.resetFilters}
+      />
+      <AddProductModal
+        isOpen={isAddProductOpen}
+        categories={catalog.categories}
+        onClose={() => setIsAddProductOpen(false)}
+        onSubmit={handleCreateProduct}
       />
     </div>
   );

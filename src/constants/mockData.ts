@@ -8,7 +8,7 @@ import type {
   DashboardStats,
   NotificationItem 
 } from '@/types';
-import { MOCK_PRODUCTS } from '@/modules/product/mocks';
+import { MOCK_PRODUCTS } from '@/modules/product/mocks/products';
 
 export const MOCK_CATEGORIES: Category[] = [
   { id: 'all', name: 'Tất cả', icon: 'Utensils', itemCount: 30 },

@@ -4,7 +4,7 @@ import { Card } from '@/components/ui/Card';
 import { Switch } from '@/components/ui/Switch';
 import type { Product } from '@/types';
 import { formatVND } from '@/utils/shippingCalculator';
-import type { ProductViewMode } from '../types';
+import type { ProductViewMode } from '@/modules/product/types/index';
 
 interface ProductCardProps {
   product: Product;
@@ -28,21 +28,12 @@ export const ProductCard = ({ product, viewMode, onToggleAvailability, onOpenAct
       <div className={clsx('relative overflow-hidden bg-slate-100 ', isListView ? 'min-h-44' : 'aspect-[4/3]')}>
         <img
           src={product.image}
-          alt=""
-          aria-hidden="true"
-          loading="lazy"
-          decoding="async"
-          className="absolute inset-0 h-full w-full scale-110 object-cover opacity-20 blur-xl"
-        />
-        <div className="absolute inset-0 bg-white/45 " aria-hidden="true" />
-        <img
-          src={product.image}
           alt={product.name}
           width="640"
           height="480"
           loading="lazy"
           decoding="async"
-          className="relative z-10 h-full w-full object-contain p-2 transition-transform duration-300 group-hover:scale-[1.02]"
+          className="relative z-10 h-full w-full bg-slate-50 object-contain p-2 transition-transform duration-300 group-hover:scale-[1.02]"
         />
         <div className="absolute left-3 top-3 z-20"><ProductAvailabilityBadge isAvailable={product.isAvailable} /></div>
         <button type="button" aria-label={`Mở thao tác cho ${product.name}`} onClick={() => onOpenActions(product)} className="absolute right-3 top-3 z-20 flex h-8 w-8 items-center justify-center rounded-lg bg-white/95 text-slate-700 shadow-md transition hover:bg-white hover:text-orange-600 cursor-pointer">

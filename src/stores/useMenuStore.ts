@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import type { Product, Category } from '@/types';
 import { MOCK_CATEGORIES } from '@/constants/mockData';
-import { MOCK_PRODUCTS } from '@/modules/product/mocks';
+import { MOCK_PRODUCTS } from '@/modules/product/mocks/products';
 
 interface MenuState {
   products: Product[];
@@ -12,6 +12,7 @@ interface MenuState {
   // Actions
   setSelectedCategoryId: (id: string) => void;
   setSearchQuery: (query: string) => void;
+  addProduct: (product: Product) => void;
   toggleProductStock: (id: string) => void;
 }
 
@@ -23,6 +24,7 @@ export const useMenuStore = create<MenuState>((set) => ({
 
   setSelectedCategoryId: (selectedCategoryId) => set({ selectedCategoryId }),
   setSearchQuery: (searchQuery) => set({ searchQuery }),
+  addProduct: (product) => set((state) => ({ products: [product, ...state.products] })),
 
   toggleProductStock: (id) => {
     set((state) => ({
